@@ -1,7 +1,7 @@
 
-[![Build Status](https://travis-ci.com/digipolisantwerp/.svg?branch=master)](https://travis-ci.com/digipolisantwerp/authz_module_nodejs)
-[![Coverage Status](https://coveralls.io/repos/github/digipolisantwerp/authz_module_nodejs/badge.svg?branch=master)](https://coveralls.io/github/digipolisantwerp/authz_module_nodejs?branch=master)
-[![npm version](https://badge.fury.io/js/%40digipolis%2Fauthz.svg)](https://badge.fury.io/js/%40digipolis%2Fauthz)
+![CI](https://github.com/digipolisantwerp/log_module_nodejs/actions/workflows/ci.yml/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/digipolisantwerp/log_module_nodejs/badge.svg?branch=master)](https://coveralls.io/github/digipolisantwerp/log_module_nodejs?branch=master)
+[![npm version](https://badge.fury.io/js/%40digipolis%2log.svg)](https://badge.fury.io/js/%40digipolis%2Flog)
 
 **npm:** [npmjs.com/package/@digipolis/log](https://www.npmjs.com/package/@digipolis/log)
 # @digipolis/log
