@@ -1,0 +1,17 @@
+.coveralls.yml
+.github
+.editorconfig
+.env
+.eslintignore
+.eslintrc.json
+.nyc_output
+.travis.yml
+CHANGELOG.md
+LICENSE
+README.md
+coverage
+example
+assets
+nodemon.json
+swagger.yml
+test
