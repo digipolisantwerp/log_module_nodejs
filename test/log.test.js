@@ -89,6 +89,36 @@ describe('Logs:', () => {
         correlationId: '',
       });
     });
+    it('{ message: "logmessage", type: "mytype" }', async () => {
+      const logmessage = { message: 'logmessage', type: 'mytype' };
+      const logspy = sandbox.stub(console, 'log');
+      log(console, {
+        type: 'json',
+      });
+      console.log(logmessage);
+      sinon.assert.calledWith(logspy, {
+        message: logmessage.message,
+        timestamp: new Date().toISOString(),
+        type: ['mytype'],
+        level: 'INFO',
+        correlationId: '',
+      });
+    });
+    it('{ message: "logmessage", type: ["mytype", "mytype2"] }', async () => {
+      const logmessage = { message: 'logmessage', type: ['mytype', 'mytype2'] };
+      const logspy = sandbox.stub(console, 'log');
+      log(console, {
+        type: 'json',
+      });
+      console.log(logmessage);
+      sinon.assert.calledWith(logspy, {
+        message: logmessage.message,
+        timestamp: new Date().toISOString(),
+        type: ['mytype', 'mytype2'],
+        level: 'INFO',
+        correlationId: '',
+      });
+    });
     it('{ message: "logmessage", extraparam: "extravalue" }', async () => {
       const logmessage = { message: 'logmessage', extraparam: 'extravalue' };
       const logspy = sandbox.stub(console, 'log');
@@ -98,6 +128,25 @@ describe('Logs:', () => {
       console.log(logmessage);
       sinon.assert.calledWith(logspy, {
         message: 'logmessage Extrainfo: {"extraparam":"extravalue"}',
+        timestamp: new Date().toISOString(),
+        type: ['technical'],
+        level: 'INFO',
+        correlationId: '',
+      });
+    });
+    it('new Error(\'errormessage\')', async () => {
+      const logmessage = new Error('errormessage');
+      logmessage.stack = `
+  stack
+  stack
+  stack`;
+      const logspy = sandbox.stub(console, 'log');
+      log(console, {
+        type: 'json',
+      });
+      console.log(logmessage);
+      sinon.assert.calledWith(logspy, {
+        message: 'errormessage \n  stack\n  stack\n  stack',
         timestamp: new Date().toISOString(),
         type: ['technical'],
         level: 'INFO',

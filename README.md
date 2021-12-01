@@ -24,6 +24,8 @@ Log helper which converts default logs to indexable json log.
    * [License](#license)
 <!--te-->
 
+## Spec
+[https://github.com/digipolisantwerpdocumentation/logging-requirements](https://github.com/digipolisantwerpdocumentation/logging-requirements)
 ## Installing
 
 #### npm:
@@ -79,7 +81,7 @@ type: 'log' -> {"message":"hello","timestamp":"2021-12-01T09:45:56.515Z","type":
 
 ## Logging
 
-#### examples
+#### Examples
 ```javascript
 
 // type: json
@@ -107,13 +109,45 @@ console.error('hello');
 // type: json
 */
 
-console.error(new Error('hello'));
+console.error(new Error('Errormessage'));
 /*
 {
-  message: 'hello',
-  timestamp: '2021-12-01T09:44:20.565Z',
+  message: 'Errormessage Error: Errormessage\n' +
+    '    at Object.<anonymous> (/Users/oliviervandenmooter/Projects/Digipolis/diglog/example/index.js:17:13)\n' +
+    '    at Module._compile (node:internal/modules/cjs/loader:1095:14)\n' +
+    '    at Object.Module._extensions..js (node:internal/modules/cjs/loader:1124:10)\n' +
+    '    at Module.load (node:internal/modules/cjs/loader:975:32)\n' +
+    '    at Function.Module._load (node:internal/modules/cjs/loader:816:12)\n' +
+    '    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:79:12)\n' +
+    '    at node:internal/main/run_main_module:17:47',
+  timestamp: '2021-12-01T11:00:13.073Z',
   type: [ 'technical' ],
   level: 'ERROR',
+  correlationId: ''
+}
+*/
+
+// structured message
+console.log({ message: 'logmessage2', timestamp: 'timestamp123' })
+/*
+{
+  message: 'logmessage2',
+  timestamp: 'timestamp123',
+  type: [ 'technical' ],
+  level: 'INFO',
+  correlationId: ''
+}
+
+// structured message with extra params
+*/
+console.log({ message: 'logmessage2', timestamp: 'timestamp123', extra_param1: "extra_value" });
+
+/*
+{
+  message: 'logmessage2 Extrainfo: {"extra_param1":"extra_value"}',
+  timestamp: 'timestamp123',
+  type: [ 'technical' ],
+  level: 'INFO',
   correlationId: ''
 }
 */
