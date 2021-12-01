@@ -1,0 +1,127 @@
+{
+    "$id": "https://schemas.digipolis.be/templates/logschema.schema.json",
+    "title": "Log",
+    "type": "object",
+    "description": "Use this schema to validate the log output of an application. Only valid logs can be properly parsed in Elasticsearch.",
+    "required": [
+        "timestamp",
+        "type",
+        "correlationId",
+        "level"
+    ],
+    "properties": {
+        "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp of log occurence in RFC 3339 or ISO8601"
+        },
+        "type": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "enum": ["application", "technical", "privacy"]
+            },
+            "description": "Describes the nature of the data, multiple options possible."
+        },
+        "correlationId": {
+            "type": "string",
+            "description": "Unique UUID used to correlate events in the system over multiple logs."
+        },
+        "level": {
+            "type": "string",
+            "enum": ["DEBUG", "INFO", "WARN", "ERROR", "FATAL", "TRACE"],
+            "description": "Key word for prioritization"
+        },
+        "request": {
+            "$ref": "#/$defs/request"
+        },
+        "response": {
+            "$ref": "#/$defs/response"
+        },
+        "protocol": {
+            "ref": "#/$defs/protocol"
+        },
+        "payload": {
+            "ref": "#/$defs/payload"
+        },
+        "headers": {
+            "$ref": "#/$defs/headers"
+        },
+        "topic": {
+            "type": "string",
+            "description": "Topic of event."
+        },
+        "message": {
+            "type": "string",
+            "description": "Extra information that can't be categorized."
+        }
+    },
+    "$defs": {
+        "request": {
+            "type": "object",
+            "required": [
+                "host",
+                "path",
+                "method"
+            ],
+            "properties": {
+                "headers": {
+                    "$ref": "#/$defs/headers"
+                },
+                "host": {
+                    "type": "string",
+                    "description": "Base url of the request."
+                },
+                "path": {
+                    "type": "string",
+                    "description": "Path after base url with optional parameters."
+                },
+                "payload": {
+                    "ref": "#/$defs/payload"
+                },
+                "method": {
+                    "type": "string",
+                    "enum": ["GET", "PUT", "PATCH", "POST", "DELETE", "HEAD", "CONNECT", "OPTIONS", "TRACE"],
+                    "description": "Used HTTP method."
+                }
+            }
+        },
+        "response": {
+            "type": "object",
+            "required": [
+                "status",
+                "duration"
+            ],
+            "properties": {
+                "headers": {
+                    "$ref": "#/$defs/headers"
+                },
+                "payload": {
+                    "ref": "#/$defs/payload"
+                },
+                "status": {
+                    "type": "number",
+                    "minimum": 100,
+                    "maximum": 599,
+                    "description": "Received HTTP statuscode."
+                },
+                "duration": {
+                    "type": "number",
+                    "description": "HTTP call duration in ms."
+                }
+            }
+        },
+        "headers": {
+            "type": "object",
+            "description": "Optional event or API call headers"
+        },
+        "protocol": {
+            "type": "string",
+            "description": "Describes the protocol, e.g. HTTP"
+        },
+        "payload": {
+            "type": "string",
+            "description": "Event or API call payload can optionally be logged as a JSON escaped string."
+        }
+    }
+}
