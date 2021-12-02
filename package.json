@@ -10,6 +10,10 @@
     "coverage": "nyc --reporter=html --reporter=text --reporter=lcovonly npm test && eslint .",
     "coverage:watch": "nodemon --exec 'npm run coverage || true'"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/digipolisantwerp/log_module_nodejs.git"
+  },
   "author": "Olivier Van den Mooter",
   "license": "ISC",
   "devDependencies": {
