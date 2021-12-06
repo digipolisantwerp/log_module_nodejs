@@ -1,27 +1,74 @@
 const sinon = require('sinon');
 const log = require('../lib');
+const { levels } = require('../lib/config');
 
 describe('log levels:', () => {
   let sandbox;
+  let sandbox2;
   let clock;
+  const logstub = {};
+
+  before((done) => {
+    if (console.isProxied) console.reset();
+    sandbox2 = sinon.createSandbox();
+    Object.keys(levels.consoleLevels).forEach((level) => {
+      if (console[level].restore) console[level].restore();
+      logstub[level] = sandbox2.spy(console, level);
+    });
+    clock = sinon.useFakeTimers(Date.now());
+    done();
+  });
+  after((done) => {
+    clock.restore();
+    sandbox2.restore();
+    done();
+  });
   beforeEach((done) => {
     sandbox = sinon.createSandbox();
-    clock = sinon.useFakeTimers(Date.now());
     done();
   });
   afterEach(() => {
     sandbox.restore();
-    clock.restore();
   });
   describe('log', () => {
-    it('"logmessage"', async () => {
+    it('"logmessage" should use last config', async () => {
       const logmessage = 'logmessage';
-      const logspy = sandbox.stub(console, 'log');
+      log(console, {
+        type: 'json',
+      });
+      log(console, {
+        type: 'json',
+      });
+      log(console, {
+        type: 'text',
+      });
+      log(console, {
+        type: 'json',
+      });
+      log(console, {
+        type: 'log',
+      });
       log(console, {
         type: 'json',
       });
       console.log(logmessage);
-      sinon.assert.calledWith(logspy, {
+      sinon.assert.calledWith(logstub.log, {
+        message: logmessage,
+        timestamp: new Date().toISOString(),
+        type: ['technical'],
+        level: 'INFO',
+        correlationId: '',
+      });
+    });
+  });
+  describe('log', () => {
+    it('"logmessage"', async () => {
+      const logmessage = 'logmessage';
+      log(console, {
+        type: 'json',
+      });
+      console.log(logmessage);
+      sinon.assert.calledWith(logstub.log, {
         message: logmessage,
         timestamp: new Date().toISOString(),
         type: ['technical'],
@@ -33,12 +80,11 @@ describe('log levels:', () => {
   describe('error', () => {
     it('"logmessage"', async () => {
       const logmessage = 'logmessage';
-      const logspy = sandbox.stub(console, 'error');
       log(console, {
         type: 'json',
       });
       console.error(logmessage);
-      sinon.assert.calledWith(logspy, {
+      sinon.assert.calledWith(logstub.error, {
         message: logmessage,
         timestamp: new Date().toISOString(),
         type: ['technical'],
@@ -50,12 +96,11 @@ describe('log levels:', () => {
   describe('warn', () => {
     it('"logmessage"', async () => {
       const logmessage = 'logmessage';
-      const logspy = sandbox.stub(console, 'warn');
       log(console, {
         type: 'json',
       });
       console.warn(logmessage);
-      sinon.assert.calledWith(logspy, {
+      sinon.assert.calledWith(logstub.warn, {
         message: logmessage,
         timestamp: new Date().toISOString(),
         type: ['technical'],
@@ -67,12 +112,11 @@ describe('log levels:', () => {
   describe('info', () => {
     it('"logmessage"', async () => {
       const logmessage = 'logmessage';
-      const logspy = sandbox.stub(console, 'info');
       log(console, {
         type: 'json',
       });
       console.info(logmessage);
-      sinon.assert.calledWith(logspy, {
+      sinon.assert.calledWith(logstub.info, {
         message: logmessage,
         timestamp: new Date().toISOString(),
         type: ['technical'],
@@ -84,12 +128,11 @@ describe('log levels:', () => {
   describe('debug', () => {
     it('"logmessage"', async () => {
       const logmessage = 'logmessage';
-      const logspy = sandbox.stub(console, 'debug');
       log(console, {
         type: 'json',
       });
       console.debug(logmessage);
-      sinon.assert.calledWith(logspy, {
+      sinon.assert.calledWith(logstub.debug, {
         message: logmessage,
         timestamp: new Date().toISOString(),
         type: ['technical'],

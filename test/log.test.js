@@ -1,5 +1,6 @@
 const sinon = require('sinon');
 const chai = require('chai');
+const { levels } = require('../lib/config');
 const log = require('../lib');
 const logschema = require('./data/logschema.json');
 
@@ -8,25 +9,39 @@ chai.use(require('chai-json-schema'));
 
 describe('Logs:', () => {
   let sandbox;
+  let sandbox2;
   let clock;
+  const logstub = {};
+
+  before((done) => {
+    if (console.isProxied) console.reset();
+    sandbox2 = sinon.createSandbox();
+    Object.keys(levels.consoleLevels).forEach((level) => {
+      if (console[level].restore) console[level].restore();
+      logstub[level] = sandbox2.spy(console, level);
+    });
+    clock = sinon.useFakeTimers(Date.now());
+    done();
+  });
+  after((done) => {
+    clock.restore();
+    sandbox2.restore();
+    done();
+  });
   beforeEach((done) => {
     sandbox = sinon.createSandbox();
-    clock = sinon.useFakeTimers(Date.now());
     done();
   });
   afterEach(() => {
     sandbox.restore();
-    clock.restore();
   });
   it('default log', async () => {
-    const logspy = sandbox.stub(console, 'log');
     console.log('hello');
-    sinon.assert.calledWith(logspy, 'hello');
+    sinon.assert.calledWith(logstub.log, 'hello');
   });
   describe('{ type: json }', () => {
     it('"logmessage"', async () => {
       const logmessage = 'logmessage';
-      const logspy = sandbox.stub(console, 'log');
       log(console, {
         type: 'json',
       });
@@ -38,12 +53,11 @@ describe('Logs:', () => {
         level: 'INFO',
         correlationId: '',
       };
-      sinon.assert.calledWith(logspy, result);
+      sinon.assert.calledWith(logstub.log, result);
       expect(result).to.be.jsonSchema(logschema);
     });
     it('{ message: "logmessage" }', async () => {
       const logmessage = { message: 'logmessage' };
-      const logspy = sandbox.stub(console, 'log');
       log(console, {
         type: 'json',
       });
@@ -55,12 +69,11 @@ describe('Logs:', () => {
         level: 'INFO',
         correlationId: '',
       };
-      sinon.assert.calledWith(logspy, result);
+      sinon.assert.calledWith(logstub.log, result);
       expect(result).to.be.jsonSchema(logschema);
     });
     it('{ timestamp: "timestamp" }', async () => {
       const logmessage = { timestamp: 'timestamp' };
-      const logspy = sandbox.stub(console, 'log');
       log(console, {
         type: 'json',
       });
@@ -72,16 +85,15 @@ describe('Logs:', () => {
         level: 'INFO',
         correlationId: '',
       };
-      sinon.assert.calledWith(logspy, result);
+      sinon.assert.calledWith(logstub.log, result);
     });
     it('{ message: "logmessage", timestamp: "timestamp" }', async () => {
       const logmessage = { message: 'logmessage', timestamp: 'timestamp' };
-      const logspy = sandbox.stub(console, 'log');
       log(console, {
         type: 'json',
       });
       console.log(logmessage);
-      sinon.assert.calledWith(logspy, {
+      sinon.assert.calledWith(logstub.log, {
         message: logmessage.message,
         timestamp: 'timestamp',
         type: ['technical'],
@@ -91,12 +103,11 @@ describe('Logs:', () => {
     });
     it('{ message: "logmessage", type: "mytype" }', async () => {
       const logmessage = { message: 'logmessage', type: 'mytype' };
-      const logspy = sandbox.stub(console, 'log');
       log(console, {
         type: 'json',
       });
       console.log(logmessage);
-      sinon.assert.calledWith(logspy, {
+      sinon.assert.calledWith(logstub.log, {
         message: logmessage.message,
         timestamp: new Date().toISOString(),
         type: ['mytype'],
@@ -106,12 +117,11 @@ describe('Logs:', () => {
     });
     it('{ message: "logmessage", type: ["mytype", "mytype2"] }', async () => {
       const logmessage = { message: 'logmessage', type: ['mytype', 'mytype2'] };
-      const logspy = sandbox.stub(console, 'log');
       log(console, {
         type: 'json',
       });
       console.log(logmessage);
-      sinon.assert.calledWith(logspy, {
+      sinon.assert.calledWith(logstub.log, {
         message: logmessage.message,
         timestamp: new Date().toISOString(),
         type: ['mytype', 'mytype2'],
@@ -121,12 +131,11 @@ describe('Logs:', () => {
     });
     it('{ message: "logmessage", extraparam: "extravalue" }', async () => {
       const logmessage = { message: 'logmessage', extraparam: 'extravalue' };
-      const logspy = sandbox.stub(console, 'log');
       log(console, {
         type: 'json',
       });
       console.log(logmessage);
-      sinon.assert.calledWith(logspy, {
+      sinon.assert.calledWith(logstub.log, {
         message: 'logmessage Extrainfo: {"extraparam":"extravalue"}',
         timestamp: new Date().toISOString(),
         type: ['technical'],
@@ -140,12 +149,11 @@ describe('Logs:', () => {
   stack
   stack
   stack`;
-      const logspy = sandbox.stub(console, 'log');
       log(console, {
         type: 'json',
       });
       console.log(logmessage);
-      sinon.assert.calledWith(logspy, {
+      sinon.assert.calledWith(logstub.log, {
         message: 'errormessage \n  stack\n  stack\n  stack',
         timestamp: new Date().toISOString(),
         type: ['technical'],
@@ -157,7 +165,6 @@ describe('Logs:', () => {
   describe('{ type: log }', () => {
     it('"logmessage"', async () => {
       const logmessage = 'logmessage';
-      const logspy = sandbox.stub(console, 'log');
       log(console, {
         type: 'log',
       });
@@ -169,16 +176,15 @@ describe('Logs:', () => {
         level: 'INFO',
         correlationId: '',
       });
-      sinon.assert.calledWith(logspy, result);
+      sinon.assert.calledWith(logstub.log, result);
     });
     it('{ message: "logmessage" }', async () => {
       const logmessage = { message: 'logmessage' };
-      const logspy = sandbox.stub(console, 'log');
       log(console, {
         type: 'log',
       });
       console.log(logmessage);
-      sinon.assert.calledWith(logspy, JSON.stringify({
+      sinon.assert.calledWith(logstub.log, JSON.stringify({
         message: logmessage.message,
         timestamp: new Date().toISOString(),
         type: ['technical'],
@@ -188,12 +194,11 @@ describe('Logs:', () => {
     });
     it('{ timestamp: "timestamp" }', async () => {
       const logmessage = { timestamp: 'timestamp' };
-      const logspy = sandbox.stub(console, 'log');
       log(console, {
         type: 'log',
       });
       console.log(logmessage);
-      sinon.assert.calledWith(logspy, JSON.stringify({
+      sinon.assert.calledWith(logstub.log, JSON.stringify({
         message: '',
         timestamp: 'timestamp',
         type: ['technical'],
@@ -203,12 +208,11 @@ describe('Logs:', () => {
     });
     it('{ message: "logmessage", timestamp: "timestamp" }', async () => {
       const logmessage = { message: 'logmessage', timestamp: 'timestamp' };
-      const logspy = sandbox.stub(console, 'log');
       log(console, {
         type: 'log',
       });
       console.log(logmessage);
-      sinon.assert.calledWith(logspy, JSON.stringify({
+      sinon.assert.calledWith(logstub.log, JSON.stringify({
         message: logmessage.message,
         timestamp: 'timestamp',
         type: ['technical'],
@@ -218,12 +222,11 @@ describe('Logs:', () => {
     });
     it('{ message: "logmessage", extraparam: "extravalue" }', async () => {
       const logmessage = { message: 'logmessage', extraparam: 'extravalue' };
-      const logspy = sandbox.stub(console, 'log');
       log(console, {
         type: 'log',
       });
       console.log(logmessage);
-      sinon.assert.calledWith(logspy, JSON.stringify({
+      sinon.assert.calledWith(logstub.log, JSON.stringify({
         message: 'logmessage Extrainfo: {"extraparam":"extravalue"}',
         timestamp: new Date().toISOString(),
         type: ['technical'],
@@ -235,68 +238,61 @@ describe('Logs:', () => {
   describe('{ type: text }', () => {
     it('"logmessage"', async () => {
       const logmessage = 'logmessage';
-      const logspy = sandbox.stub(console, 'log');
       log(console, {
         type: 'text',
       });
       console.log(logmessage);
-      sinon.assert.calledWith(logspy, 'INFO:', new Date().toISOString(), logmessage);
+      sinon.assert.calledWith(logstub.log, 'INFO:', new Date().toISOString(), logmessage);
     });
     it('{ message: "logmessage" }', async () => {
       const logmessage = { message: 'logmessage' };
-      const logspy = sandbox.stub(console, 'log');
       log(console, {
         type: 'text',
       });
       console.log(logmessage);
-      sinon.assert.calledWith(logspy, 'INFO:', new Date().toISOString(), logmessage);
+      sinon.assert.calledWith(logstub.log, 'INFO:', new Date().toISOString(), logmessage);
     });
     it('{ timestamp: "timestamp" }', async () => {
       const logmessage = { timestamp: 'timestamp' };
-      const logspy = sandbox.stub(console, 'log');
       log(console, {
         type: 'text',
       });
       console.log(logmessage);
-      sinon.assert.calledWith(logspy, 'INFO:', new Date().toISOString(), logmessage);
+      sinon.assert.calledWith(logstub.log, 'INFO:', new Date().toISOString(), logmessage);
     });
     it('{ message: "logmessage", timestamp: "timestamp" }', async () => {
       const logmessage = { message: 'logmessage', timestamp: 'timestamp' };
-      const logspy = sandbox.stub(console, 'log');
       log(console, {
         type: 'text',
       });
       console.log(logmessage);
-      sinon.assert.calledWith(logspy, 'INFO:', new Date().toISOString(), logmessage);
+      sinon.assert.calledWith(logstub.log, 'INFO:', new Date().toISOString(), logmessage);
     });
     it('{ message: "logmessage", extraparam: "extravalue" }', async () => {
       const logmessage = { message: 'logmessage', extraparam: 'extravalue' };
-      const logspy = sandbox.stub(console, 'log');
       log(console, {
         type: 'text',
       });
       console.log(logmessage);
-      sinon.assert.calledWith(logspy, 'INFO:', new Date().toISOString(), logmessage);
+      sinon.assert.calledWith(logstub.log, 'INFO:', new Date().toISOString(), logmessage);
     });
     it('{ message: "logmessage", extraparam: "extravalue" }', async () => {
       const logmessage = { message: 'logmessage', extraparam: 'extravalue' };
-      const logspy = sandbox.stub(console, 'error');
       log(console, {
         type: 'text',
       });
       console.error(logmessage);
-      sinon.assert.calledWith(logspy, 'ERROR:', new Date().toISOString(), logmessage);
+      sinon.assert.calledWith(logstub.error, 'ERROR:', new Date().toISOString(), logmessage);
     });
   });
   describe('{ type: fake }', () => {
     it('"logmessage"', async () => {
       const logmessage = 'logmessage';
-      const logspy = sandbox.stub(console, 'log');
       log(console, {
         type: 'fake',
       });
       console.log(logmessage);
-      sinon.assert.calledWith(logspy, JSON.stringify({
+      sinon.assert.calledWith(logstub.log, JSON.stringify({
         message: 'logmessage',
         timestamp: new Date().toISOString(),
         type: ['technical'],
