@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 [Unreleased]: https://github.com/digipolisantwerp/authz_module_nodejs/compare/v0.0.2...HEAD
 ## [Unreleased] - yyyy-mm-dd
 
+[0.0.3j]: https://github.com/digipolisantwerp/log_module_nodejs/tree/v0.0.2
+## [0.0.3] - 2021-12-08
+
+- Add request log formatting support
+
 [0.0.2]: https://github.com/digipolisantwerp/log_module_nodejs/tree/v0.0.2
 ## [0.0.2] - 2021-12-06
 
