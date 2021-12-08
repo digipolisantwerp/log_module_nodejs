@@ -79,7 +79,6 @@ describe('Logs:', () => {
       });
       console.log(logmessage);
       const result = {
-        message: '',
         timestamp: 'timestamp',
         type: ['technical'],
         level: 'INFO',
@@ -136,11 +135,11 @@ describe('Logs:', () => {
       });
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, {
-        message: 'logmessage Extrainfo: {"extraparam":"extravalue"}',
         timestamp: new Date().toISOString(),
         type: ['technical'],
         level: 'INFO',
         correlationId: '',
+        message: 'logmessage Extrainfo: {"extraparam":"extravalue"}',
       });
     });
     it('new Error(\'errormessage\')', async () => {
@@ -170,11 +169,11 @@ describe('Logs:', () => {
       });
       console.log(logmessage);
       const result = JSON.stringify({
-        message: logmessage,
         timestamp: new Date().toISOString(),
         type: ['technical'],
         level: 'INFO',
         correlationId: '',
+        message: logmessage,
       });
       sinon.assert.calledWith(logstub.log, result);
     });
@@ -185,11 +184,11 @@ describe('Logs:', () => {
       });
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, JSON.stringify({
-        message: logmessage.message,
         timestamp: new Date().toISOString(),
         type: ['technical'],
         level: 'INFO',
         correlationId: '',
+        message: logmessage.message,
       }));
     });
     it('{ timestamp: "timestamp" }', async () => {
@@ -199,7 +198,6 @@ describe('Logs:', () => {
       });
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, JSON.stringify({
-        message: '',
         timestamp: 'timestamp',
         type: ['technical'],
         level: 'INFO',
@@ -213,11 +211,11 @@ describe('Logs:', () => {
       });
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, JSON.stringify({
-        message: logmessage.message,
         timestamp: 'timestamp',
         type: ['technical'],
         level: 'INFO',
         correlationId: '',
+        message: logmessage.message,
       }));
     });
     it('{ message: "logmessage", extraparam: "extravalue" }', async () => {
@@ -227,11 +225,11 @@ describe('Logs:', () => {
       });
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, JSON.stringify({
-        message: 'logmessage Extrainfo: {"extraparam":"extravalue"}',
         timestamp: new Date().toISOString(),
         type: ['technical'],
         level: 'INFO',
         correlationId: '',
+        message: 'logmessage Extrainfo: {"extraparam":"extravalue"}',
       }));
     });
   });
@@ -293,11 +291,11 @@ describe('Logs:', () => {
       });
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, JSON.stringify({
-        message: 'logmessage',
         timestamp: new Date().toISOString(),
         type: ['technical'],
         level: 'INFO',
         correlationId: '',
+        message: 'logmessage',
       }));
     });
   });
