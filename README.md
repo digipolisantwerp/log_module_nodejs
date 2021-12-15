@@ -44,7 +44,7 @@ $ yarn add @digipolis/log
 | Param                       | Description                                | Values                                    |
 | :---                        | :---                                       | :---                                      |
 | ***type*** *(optional)*     | Set logging mode                           | **log** (default) / **json** / **text**   |
-| ***override*** *(optional)* | Set to override given console (default)    | **true** (default) / **false** (return)   |
+| ***override*** *(optional)* | Set to override given console (default)    | **true** / **false** (default) (return)   |
 
 ##### Example:
 ```javascript

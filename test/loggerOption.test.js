@@ -42,29 +42,30 @@ describe('Logs:', () => {
     it('"isProxy"', async () => {
       log(console, {
         type: 'json',
+        override: true,
       });
       expect(console.log.isProxy).to.eql(true);
     });
-    it('"overide": true (default)', async () => {
+    it('"override": true (default)', async () => {
       const returnedlogger = log(console, {
         type: 'json',
-        overide: true,
-      });
-      expect(returnedlogger.log.isProxy).to.eql(true);
-      expect(console.log.isProxy).to.eql(true);
-    });
-    it('"overide": true (set)', async () => {
-      const returnedlogger = log(console, {
-        type: 'json',
-        overide: true,
+        override: true,
       });
       expect(returnedlogger.log.isProxy).to.eql(true);
       expect(console.log.isProxy).to.eql(true);
     });
-    it('"overide":false ', async () => {
+    it('"override": true (set)', async () => {
       const returnedlogger = log(console, {
         type: 'json',
-        overide: false,
+        override: true,
+      });
+      expect(returnedlogger.log.isProxy).to.eql(true);
+      expect(console.log.isProxy).to.eql(true);
+    });
+    it('"override":false ', async () => {
+      const returnedlogger = log(console, {
+        type: 'json',
+        override: false,
       });
       expect(returnedlogger.log.isProxy).to.eql(true);
       expect(console.log.isProxy).to.eql(undefined);
@@ -72,7 +73,7 @@ describe('Logs:', () => {
     it('"getprop cover', async () => {
       const returnedlogger = log(console, {
         type: 'json',
-        overide: true,
+        override: true,
       });
       expect(returnedlogger.log.prop).to.eql(undefined);
     });

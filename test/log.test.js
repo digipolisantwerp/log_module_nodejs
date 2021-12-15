@@ -44,6 +44,7 @@ describe('Logs:', () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'json',
+        override: true,
       });
       console.log(logmessage);
       const result = {
@@ -60,6 +61,7 @@ describe('Logs:', () => {
       const logmessage = { message: 'logmessage' };
       log(console, {
         type: 'json',
+        override: true,
       });
       console.log(logmessage);
       const result = {
@@ -76,6 +78,7 @@ describe('Logs:', () => {
       const logmessage = { timestamp: 'timestamp' };
       log(console, {
         type: 'json',
+        override: true,
       });
       console.log(logmessage);
       const result = {
@@ -90,6 +93,7 @@ describe('Logs:', () => {
       const logmessage = { message: 'logmessage', timestamp: 'timestamp' };
       log(console, {
         type: 'json',
+        override: true,
       });
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, {
@@ -104,6 +108,7 @@ describe('Logs:', () => {
       const logmessage = { message: 'logmessage', type: 'mytype' };
       log(console, {
         type: 'json',
+        override: true,
       });
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, {
@@ -118,6 +123,7 @@ describe('Logs:', () => {
       const logmessage = { message: 'logmessage', type: ['mytype', 'mytype2'] };
       log(console, {
         type: 'json',
+        override: true,
       });
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, {
@@ -132,6 +138,7 @@ describe('Logs:', () => {
       const logmessage = { message: 'logmessage', extraparam: 'extravalue' };
       log(console, {
         type: 'json',
+        override: true,
       });
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, {
@@ -150,6 +157,7 @@ describe('Logs:', () => {
   stack`;
       log(console, {
         type: 'json',
+        override: true,
       });
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, {
@@ -166,6 +174,7 @@ describe('Logs:', () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'log',
+        override: true,
       });
       console.log(logmessage);
       const result = JSON.stringify({
@@ -181,6 +190,7 @@ describe('Logs:', () => {
       const logmessage = { message: 'logmessage' };
       log(console, {
         type: 'log',
+        override: true,
       });
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, JSON.stringify({
@@ -195,6 +205,7 @@ describe('Logs:', () => {
       const logmessage = { timestamp: 'timestamp' };
       log(console, {
         type: 'log',
+        override: true,
       });
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, JSON.stringify({
@@ -208,6 +219,7 @@ describe('Logs:', () => {
       const logmessage = { message: 'logmessage', timestamp: 'timestamp' };
       log(console, {
         type: 'log',
+        override: true,
       });
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, JSON.stringify({
@@ -222,6 +234,7 @@ describe('Logs:', () => {
       const logmessage = { message: 'logmessage', extraparam: 'extravalue' };
       log(console, {
         type: 'log',
+        override: true,
       });
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, JSON.stringify({
@@ -238,6 +251,7 @@ describe('Logs:', () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'text',
+        override: true,
       });
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, 'INFO:', new Date().toISOString(), logmessage);
@@ -246,6 +260,7 @@ describe('Logs:', () => {
       const logmessage = { message: 'logmessage' };
       log(console, {
         type: 'text',
+        override: true,
       });
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, 'INFO:', new Date().toISOString(), logmessage);
@@ -254,6 +269,7 @@ describe('Logs:', () => {
       const logmessage = { timestamp: 'timestamp' };
       log(console, {
         type: 'text',
+        override: true,
       });
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, 'INFO:', new Date().toISOString(), logmessage);
@@ -262,6 +278,7 @@ describe('Logs:', () => {
       const logmessage = { message: 'logmessage', timestamp: 'timestamp' };
       log(console, {
         type: 'text',
+        override: true,
       });
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, 'INFO:', new Date().toISOString(), logmessage);
@@ -270,6 +287,7 @@ describe('Logs:', () => {
       const logmessage = { message: 'logmessage', extraparam: 'extravalue' };
       log(console, {
         type: 'text',
+        override: true,
       });
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, 'INFO:', new Date().toISOString(), logmessage);
@@ -278,9 +296,27 @@ describe('Logs:', () => {
       const logmessage = { message: 'logmessage', extraparam: 'extravalue' };
       log(console, {
         type: 'text',
+        override: true,
       });
       console.error(logmessage);
       sinon.assert.calledWith(logstub.error, 'ERROR:', new Date().toISOString(), logmessage);
+    });
+    it('circular', async () => {
+      const x = { message: 'logmessage', extraparam: 'extravalue' };
+      const y = { message: 'logmessage', extraparam: 'extravalue', circular: x };
+      x.y = y;
+      log(console, {
+        type: 'json',
+        override: true,
+      });
+      console.error(x);
+      sinon.assert.calledWith(logstub.error, {
+        timestamp: new Date().toISOString(),
+        type: ['technical'],
+        level: 'ERROR',
+        correlationId: '',
+        message: 'logmessage Extrainfo: {"extraparam":"extravalue","y":{"message":"logmessage","extraparam":"extravalue","circular":{"message":"logmessage","extraparam":"extravalue","y":"[Circular]"}}}',
+      });
     });
   });
   describe('{ type: fake }', () => {
@@ -288,6 +324,7 @@ describe('Logs:', () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'fake',
+        override: true,
       });
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, JSON.stringify({

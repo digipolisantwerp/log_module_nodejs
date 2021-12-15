@@ -35,21 +35,27 @@ describe('log levels:', () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'json',
+        override: true,
       });
       log(console, {
         type: 'json',
+        override: true,
       });
       log(console, {
         type: 'text',
+        override: true,
       });
       log(console, {
         type: 'json',
+        override: true,
       });
       log(console, {
         type: 'log',
+        override: true,
       });
       log(console, {
         type: 'json',
+        override: true,
       });
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, {
@@ -66,6 +72,7 @@ describe('log levels:', () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'json',
+        override: true,
       });
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, {
@@ -82,6 +89,7 @@ describe('log levels:', () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'json',
+        override: true,
       });
       console.error(logmessage);
       sinon.assert.calledWith(logstub.error, {
@@ -98,6 +106,7 @@ describe('log levels:', () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'json',
+        override: true,
       });
       console.warn(logmessage);
       sinon.assert.calledWith(logstub.warn, {
@@ -114,6 +123,7 @@ describe('log levels:', () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'json',
+        override: true,
       });
       console.info(logmessage);
       sinon.assert.calledWith(logstub.info, {
@@ -130,6 +140,7 @@ describe('log levels:', () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'json',
+        override: true,
       });
       console.debug(logmessage);
       sinon.assert.calledWith(logstub.debug, {
