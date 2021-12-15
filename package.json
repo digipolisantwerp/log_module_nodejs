@@ -1,6 +1,6 @@
 {
   "name": "@digipolis/log",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "a logging tool for digipolis kibana logging",
   "main": "lib/index.js",
   "scripts": {

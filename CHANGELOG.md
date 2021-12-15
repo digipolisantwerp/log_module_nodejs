@@ -4,10 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]: https://github.com/digipolisantwerp/authz_module_nodejs/compare/v0.0.2...HEAD
+[Unreleased]: https://github.com/digipolisantwerp/authz_module_nodejs/compare/v0.0.4...HEAD
 ## [Unreleased] - yyyy-mm-dd
 
-[0.0.3j]: https://github.com/digipolisantwerp/log_module_nodejs/tree/v0.0.2
+
+[0.0.4]: https://github.com/digipolisantwerp/log_module_nodejs/tree/v0.0.4
+## [0.0.4] - 2021-12-15
+
+- Support for logging circular objects
+- override default = false
+
+[0.0.3]: https://github.com/digipolisantwerp/log_module_nodejs/tree/v0.0.3
 ## [0.0.3] - 2021-12-08
 
 - Add request log formatting support
