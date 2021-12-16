@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased] - yyyy-mm-dd
 
 
+[0.0.6]: https://github.com/digipolisantwerp/log_module_nodejs/tree/v0.0.6
+## [0.0.6] - 2021-12-16
+
+- Bugfix: Don't reset the global log for loggers that don't override the global console
+
+[0.0.5]: https://github.com/digipolisantwerp/log_module_nodejs/tree/v0.0.5
+## [0.0.5] - 2021-12-15
+
+- re-publish with updated doc
+
 [0.0.4]: https://github.com/digipolisantwerp/log_module_nodejs/tree/v0.0.4
 ## [0.0.4] - 2021-12-15
 
