@@ -19,6 +19,7 @@ Log helper which converts default logs to indexable json log.
    * [Configuration](#configuration)
    * [Logging](#logging)
    * [Running the tests](#running-the-tests)
+   * [Dependencies](#dependencies)
    * [Versioning](#versioning)
    * [Authors](#authors)
    * [License](#license)
@@ -40,11 +41,13 @@ $ yarn add @digipolis/log
 
 ## Configuration
 
-##### Params:
+### Params:
 | Param                       | Description                                | Values                                    |
 | :---                        | :---                                       | :---                                      |
 | ***type*** *(optional)*     | Set logging mode                           | **log** (default) / **json** / **text**   |
 | ***override*** *(optional)* | Set to override given console (default)    | **true** / **false** (default)            |
+
+## Examples
 
 ##### Example:
 ```javascript
@@ -80,9 +83,8 @@ type: 'log' -> {"message":"hello","timestamp":"2021-12-01T09:45:56.515Z","type":
 
 ```
 
-## Logging
 
-#### Examples
+#### output examples
 ```javascript
 
 // type: json
@@ -154,3 +156,39 @@ console.log({ message: 'logmessage2', timestamp: 'timestamp123', extra_param1: "
 */
 ```
 
+
+## Running the tests
+
+Run the tests in this repo:
+
+```bash
+$ npm run test
+$ npm run coverage
+```
+## Dependencies
+
+none.
+
+## Versioning
+
+We use [SemVer](http://semver.org/)
+
+for versioning. For the released version check changelog / tags
+
+## Contributing
+
+Pull requests are always welcome, however keep the following things in mind:
+
+- New features (both breaking and non-breaking) should always be discussed with the [repo's owner](#support). If possible, please open an issue first to discuss what you would like to change.
+- Fork this repo and issue your fix or new feature via a pull request.
+- Please make sure to update tests as appropriate. Also check possible linting errors and update the CHANGELOG if applicable.
+
+## Authors
+
+* Olivier Van den Mooter (<olivier.vandenmooter@digipolis.be>) - Initial work - [Vademo](https://github.com/vademo)
+
+See also the list of [contributors](https://github.com/digipolisantwerp/authz_module_nodejs/graphs/contributors) who participated in this project.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details

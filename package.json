@@ -1,7 +1,13 @@
 {
   "name": "@digipolis/log",
   "version": "0.0.6",
-  "description": "a logging tool for digipolis kibana logging",
+  "keywords": [
+    "digipolis",
+    "antwerpen",
+    "log",
+    "logger"
+  ],
+  "description": "A logging tool for Digipolis kibana logging",
   "main": "lib/index.js",
   "scripts": {
     "start": "nodemon ./example/index.js",
@@ -15,7 +21,7 @@
     "url": "https://github.com/digipolisantwerp/log_module_nodejs.git"
   },
   "author": "Olivier Van den Mooter",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "chai": "^4.3.4",
     "chai-json-schema": "^1.5.1",
