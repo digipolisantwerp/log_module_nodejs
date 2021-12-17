@@ -39,6 +39,14 @@ describe('Logs:', () => {
     sinon.assert.calledWith(logstub.log, 'hello');
   });
   describe('options', () => {
+    it('"override":false ', async () => {
+      const returnedlogger = log(console, {
+        type: 'json',
+        override: false,
+      });
+      expect(returnedlogger.log.isProxy).to.eql(true);
+      expect(console.log.isProxy).to.eql(undefined);
+    });
     it('"isProxy"', async () => {
       log(console, {
         type: 'json',
@@ -61,14 +69,6 @@ describe('Logs:', () => {
       });
       expect(returnedlogger.log.isProxy).to.eql(true);
       expect(console.log.isProxy).to.eql(true);
-    });
-    it('"override":false ', async () => {
-      const returnedlogger = log(console, {
-        type: 'json',
-        override: false,
-      });
-      expect(returnedlogger.log.isProxy).to.eql(true);
-      expect(console.log.isProxy).to.eql(undefined);
     });
     it('"getprop cover', async () => {
       const returnedlogger = log(console, {
