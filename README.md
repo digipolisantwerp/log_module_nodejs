@@ -53,8 +53,52 @@ $ yarn add @digipolis/log
 ```javascript
 const digipolisLogger = require('@digipolis/log');
 
-digipolisLogger(console, {
-  type: 'text', // log | json | text
+const mylogger = digipolisLogger(console, {
+  type: 'text', // log(default) | json | text
+  override: false, // false(default) | true
+});
+
+// human readable for local development
+mylogger.log('hello');
+/*
+type: 'text' -> INFO: 2021-12-01T09:43:19.173Z hello
+*/
+
+const mylogger = digipolisLogger(console, {
+  type: 'json', // log(default) | json | text
+  override: false, // false(default) | true
+});
+
+// human readable json local development
+mylogger.log('hello');
+/*
+type: 'json' -> {
+  message: 'hello',
+  timestamp: '2021-12-01T09:44:20.565Z',
+  type: [ 'technical' ],
+  level: 'INFO',
+  correlationId: ''
+}
+*/
+
+const mylogger = digipolisLogger(console, {
+  type: 'log', // log(default) | json | text
+  override: false, // false(default) | true
+});
+// log for kibana json for production
+mylogger.log('hello');
+/*
+type: 'log' -> {"message":"hello","timestamp":"2021-12-01T09:45:56.515Z","type":["technical"],"level":"INFO","correlationId":""}
+*/
+
+```
+##### Example (override the global log (this will impact more than just your code)):
+```javascript
+const digipolisLogger = require('@digipolis/log');
+
+digipolisLogger((console, {
+  type: 'text', // log(default) | json | text
+  override: true, // false(default) | true
 });
 
 // human readable for local development
@@ -63,6 +107,10 @@ console.log('hello');
 type: 'text' -> INFO: 2021-12-01T09:43:19.173Z hello
 */
 
+digipolisLogger((console, {
+  type: 'json', // log(default) | json | text
+  override: true, // false(default) | true
+});
 // human readable json local development
 console.log('hello');
 /*
@@ -75,6 +123,10 @@ type: 'json' -> {
 }
 */
 
+digipolisLogger((console, {
+  type: 'log', // log(default) | json | text
+  override: true, // false(default) | true
+});
 // log for kibana json for production
 console.log('hello');
 /*
