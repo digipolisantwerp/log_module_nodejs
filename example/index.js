@@ -1,7 +1,7 @@
 const digipolisLogger = require('../lib');
 
 const configuration = {
-  type: 'json', // log | json | text
+  type: 'json', // log | json | text | silent
   override: false, // false | true
 };
 
