@@ -169,6 +169,18 @@ describe('Logs:', () => {
       });
     });
   });
+  describe('{ type: silent }', () => {
+    it('"logmessage"', async () => {
+      logstub.log.resetHistory();
+      const logmessage = 'logmessage';
+      log(console, {
+        type: 'silent',
+        override: true,
+      });
+      console.log(logmessage);
+      sinon.assert.notCalled(logstub.log);
+    });
+  });
   describe('{ type: log }', () => {
     it('"logmessage"', async () => {
       const logmessage = 'logmessage';
