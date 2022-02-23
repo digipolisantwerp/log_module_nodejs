@@ -257,6 +257,22 @@ describe('Logs:', () => {
         message: 'logmessage Extrainfo: {"extraparam":"extravalue"}',
       }));
     });
+    it('{ message: "logmessage", extraparam: buffer }', async () => {
+      const buffer = Buffer.from('smdlfkjmsldjfmlskdjfmlskjfmlksdjflskdjf');
+      const logmessage = { message: 'logmessage', extraparam: buffer };
+      log(console, {
+        type: 'log',
+        override: true,
+      });
+      console.log(logmessage);
+      sinon.assert.calledWith(logstub.log, JSON.stringify({
+        timestamp: new Date().toISOString(),
+        type: ['technical'],
+        level: 'INFO',
+        correlationId: '',
+        message: 'logmessage Extrainfo: {"extraparam":"[Buffer]"}',
+      }));
+    });
   });
   describe('{ type: text }', () => {
     it('"logmessage"', async () => {
