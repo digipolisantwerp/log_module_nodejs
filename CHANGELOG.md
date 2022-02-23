@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased] - yyyy-mm-dd
 
 
+[0.3.0]: https://github.com/digipolisantwerp/log_module_nodejs/tree/v0.3.0
+## [0.3.0] - 2022-02-23
+
+- treat buffer as circular [Buffer]
+
 [0.2.0]: https://github.com/digipolisantwerp/log_module_nodejs/tree/v0.2.0
 ## [0.2.0] - 2022-02-10
 
