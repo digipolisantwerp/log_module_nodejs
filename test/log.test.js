@@ -1,5 +1,6 @@
 const sinon = require('sinon');
 const chai = require('chai');
+const axios = require('axios');
 const { levels } = require('../lib/config');
 const log = require('../lib');
 const logschema = require('./data/logschema.json');
@@ -363,5 +364,15 @@ describe('Logs:', () => {
         message: 'logmessage',
       }));
     });
+  });
+  it('axios error', async () => {
+    const logger = log(console, {
+      type: 'log',
+    });
+    try {
+      await axios.post('undefined');
+    } catch (e) {
+      logger.log('Error: getDataFromScopes', e);
+    }
   });
 });
