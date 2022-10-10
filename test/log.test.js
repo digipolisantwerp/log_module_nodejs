@@ -1,12 +1,12 @@
 const sinon = require('sinon');
-const crypto = require('crypto');
 const chai = require('chai');
 const axios = require('axios');
 const { levels } = require('../lib/config');
+const uuidhelper = require('../lib/helpers/uuid');
 const log = require('../lib');
 const logschema = require('./data/logschema.json');
 
-const v4 = /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i;
+const v4 = /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$|/i;
 
 const { expect } = chai;
 chai.use(require('chai-json-schema'));
@@ -34,7 +34,7 @@ describe('Logs:', () => {
   });
   beforeEach((done) => {
     sandbox = sinon.createSandbox();
-    sandbox.stub(crypto, 'randomUUID').returns('ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF');
+    sandbox.stub(uuidhelper, 'uuidV4').returns('ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF');
     done();
   });
   afterEach(() => {
@@ -368,23 +368,6 @@ describe('Logs:', () => {
       });
     });
   });
-  // describe('{ type: fake }', () => {
-  //   it.only('"logmessage"', async () => {
-  //     const logmessage = 'logmessage';
-  //     log(console, {
-  //       type: 'fake',
-  //       override: true,
-  //     });
-  //     console.log(logmessage);
-  //     sinon.assert.calledWith(logstub.log, JSON.stringify({
-  //       timestamp: new Date().toISOString(),
-  //       type: ['technical'],
-  //       level: 'INFO',
-  //       correlationId: sinon.match(v4),
-  //       message: 'logmessage',
-  //     }));
-  //   });
-  // });
   it('axios error', async () => {
     const logger = log(console, {
       type: 'log',

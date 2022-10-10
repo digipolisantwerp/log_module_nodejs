@@ -4,7 +4,7 @@ const { levels } = require('../lib/config');
 const log = require('../lib');
 chai.use(require('chai-json-schema'));
 
-const v4 = /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i;
+const v4 = /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$|/i;
 
 describe('Logs: -> ', () => {
   let sandbox;
