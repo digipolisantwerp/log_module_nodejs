@@ -203,6 +203,22 @@ describe('Logs:', () => {
       });
       sinon.assert.calledWith(logstub.log, result);
     });
+    it('"logmessage" fallback to log for unknown', async () => {
+      const logmessage = 'logmessage';
+      log(console, {
+        type: 'unknown-log-type',
+        override: true,
+      });
+      console.log(logmessage);
+      const result = JSON.stringify({
+        timestamp: new Date().toISOString(),
+        type: ['technical'],
+        level: 'INFO',
+        correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
+        message: logmessage,
+      });
+      sinon.assert.calledWith(logstub.log, result);
+    });
     it('{ message: "logmessage" }', async () => {
       const logmessage = { message: 'logmessage' };
       log(console, {
