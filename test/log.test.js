@@ -1,9 +1,12 @@
 const sinon = require('sinon');
+const crypto = require('crypto');
 const chai = require('chai');
 const axios = require('axios');
 const { levels } = require('../lib/config');
 const log = require('../lib');
 const logschema = require('./data/logschema.json');
+
+const v4 = /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i;
 
 const { expect } = chai;
 chai.use(require('chai-json-schema'));
@@ -31,6 +34,7 @@ describe('Logs:', () => {
   });
   beforeEach((done) => {
     sandbox = sinon.createSandbox();
+    sandbox.stub(crypto, 'randomUUID').returns('ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF');
     done();
   });
   afterEach(() => {
@@ -53,7 +57,7 @@ describe('Logs:', () => {
         timestamp: new Date().toISOString(),
         type: ['technical'],
         level: 'INFO',
-        correlationId: '',
+        correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
       };
       sinon.assert.calledWith(logstub.log, result);
       expect(result).to.be.jsonSchema(logschema);
@@ -70,7 +74,7 @@ describe('Logs:', () => {
         timestamp: new Date().toISOString(),
         type: ['technical'],
         level: 'INFO',
-        correlationId: '',
+        correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
       };
       sinon.assert.calledWith(logstub.log, result);
       expect(result).to.be.jsonSchema(logschema);
@@ -86,7 +90,7 @@ describe('Logs:', () => {
         timestamp: 'timestamp',
         type: ['technical'],
         level: 'INFO',
-        correlationId: '',
+        correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
       };
       sinon.assert.calledWith(logstub.log, result);
     });
@@ -102,7 +106,7 @@ describe('Logs:', () => {
         timestamp: 'timestamp',
         type: ['technical'],
         level: 'INFO',
-        correlationId: '',
+        correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
       });
     });
     it('{ message: "logmessage", type: "mytype" }', async () => {
@@ -117,7 +121,7 @@ describe('Logs:', () => {
         timestamp: new Date().toISOString(),
         type: ['mytype'],
         level: 'INFO',
-        correlationId: '',
+        correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
       });
     });
     it('{ message: "logmessage", type: ["mytype", "mytype2"] }', async () => {
@@ -132,7 +136,7 @@ describe('Logs:', () => {
         timestamp: new Date().toISOString(),
         type: ['mytype', 'mytype2'],
         level: 'INFO',
-        correlationId: '',
+        correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
       });
     });
     it('{ message: "logmessage", extraparam: "extravalue" }', async () => {
@@ -146,7 +150,7 @@ describe('Logs:', () => {
         timestamp: new Date().toISOString(),
         type: ['technical'],
         level: 'INFO',
-        correlationId: '',
+        correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
         message: 'logmessage Extrainfo: {"extraparam":"extravalue"}',
       });
     });
@@ -166,7 +170,7 @@ describe('Logs:', () => {
         timestamp: new Date().toISOString(),
         type: ['technical'],
         level: 'INFO',
-        correlationId: '',
+        correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
       });
     });
   });
@@ -194,7 +198,7 @@ describe('Logs:', () => {
         timestamp: new Date().toISOString(),
         type: ['technical'],
         level: 'INFO',
-        correlationId: '',
+        correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
         message: logmessage,
       });
       sinon.assert.calledWith(logstub.log, result);
@@ -210,7 +214,7 @@ describe('Logs:', () => {
         timestamp: new Date().toISOString(),
         type: ['technical'],
         level: 'INFO',
-        correlationId: '',
+        correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
         message: logmessage.message,
       }));
     });
@@ -225,7 +229,7 @@ describe('Logs:', () => {
         timestamp: 'timestamp',
         type: ['technical'],
         level: 'INFO',
-        correlationId: '',
+        correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
       }));
     });
     it('{ message: "logmessage", timestamp: "timestamp" }', async () => {
@@ -239,7 +243,7 @@ describe('Logs:', () => {
         timestamp: 'timestamp',
         type: ['technical'],
         level: 'INFO',
-        correlationId: '',
+        correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
         message: logmessage.message,
       }));
     });
@@ -254,7 +258,7 @@ describe('Logs:', () => {
         timestamp: new Date().toISOString(),
         type: ['technical'],
         level: 'INFO',
-        correlationId: '',
+        correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
         message: 'logmessage Extrainfo: {"extraparam":"extravalue"}',
       }));
     });
@@ -270,7 +274,7 @@ describe('Logs:', () => {
         timestamp: new Date().toISOString(),
         type: ['technical'],
         level: 'INFO',
-        correlationId: '',
+        correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
         message: 'logmessage Extrainfo: {"extraparam":"[Buffer]"}',
       }));
     });
@@ -343,28 +347,28 @@ describe('Logs:', () => {
         timestamp: new Date().toISOString(),
         type: ['technical'],
         level: 'ERROR',
-        correlationId: '',
+        correlationId: sinon.match(v4),
         message: 'logmessage Extrainfo: {"extraparam":"extravalue","y":{"message":"logmessage","extraparam":"extravalue","circular":{"message":"logmessage","extraparam":"extravalue","y":"[Circular]"}}}',
       });
     });
   });
-  describe('{ type: fake }', () => {
-    it('"logmessage"', async () => {
-      const logmessage = 'logmessage';
-      log(console, {
-        type: 'fake',
-        override: true,
-      });
-      console.log(logmessage);
-      sinon.assert.calledWith(logstub.log, JSON.stringify({
-        timestamp: new Date().toISOString(),
-        type: ['technical'],
-        level: 'INFO',
-        correlationId: '',
-        message: 'logmessage',
-      }));
-    });
-  });
+  // describe('{ type: fake }', () => {
+  //   it.only('"logmessage"', async () => {
+  //     const logmessage = 'logmessage';
+  //     log(console, {
+  //       type: 'fake',
+  //       override: true,
+  //     });
+  //     console.log(logmessage);
+  //     sinon.assert.calledWith(logstub.log, JSON.stringify({
+  //       timestamp: new Date().toISOString(),
+  //       type: ['technical'],
+  //       level: 'INFO',
+  //       correlationId: sinon.match(v4),
+  //       message: 'logmessage',
+  //     }));
+  //   });
+  // });
   it('axios error', async () => {
     const logger = log(console, {
       type: 'log',
