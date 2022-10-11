@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 [Unreleased]: https://github.com/digipolisantwerp/authz_module_nodejs/compare/v0.0.4...HEAD
 ## [Unreleased] - yyyy-mm-dd
 
+- if correlationId is empty fallback to generated uuid
 
 [0.3.1]: https://github.com/digipolisantwerp/log_module_nodejs/tree/v0.3.1
 ## [0.3.1] - 2022-07-08
