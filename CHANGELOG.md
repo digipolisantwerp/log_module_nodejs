@@ -7,7 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 [Unreleased]: https://github.com/digipolisantwerp/authz_module_nodejs/compare/v0.0.4...HEAD
 ## [Unreleased] - yyyy-mm-dd
 
-[1.0.0]: https://github.com/digipolisantwerp/log_module_nodejs/tree/v0.4.0
+[1.0.1]: https://github.com/digipolisantwerp/log_module_nodejs/tree/v1.0.1
+## [1.0.1] - 2023-08-10
+
+- published with tzg -- cleanup
+
+[1.0.0]: https://github.com/digipolisantwerp/log_module_nodejs/tree/v1.0.0
 ## [1.0.0] - 2023-08-10
 
 - Node 20 support
