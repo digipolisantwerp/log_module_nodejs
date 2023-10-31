@@ -19,3 +19,13 @@ mylogger.log({
   timestamp: 'timestamp321',
   correlationId: '🤖',
 });
+
+const configuration2 = {
+  type: 'json', // log | json | text | silent
+  override: false, // false | true
+  level: 'error', // debug | info | log | warn | error
+};
+
+const mylogger2 = digipolisLogger(console, configuration2);
+mylogger2.log('should not show');
+mylogger2.error('should show');

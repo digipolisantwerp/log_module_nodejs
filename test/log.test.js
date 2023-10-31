@@ -368,6 +368,173 @@ describe('Logs:', () => {
       });
     });
   });
+  describe('{ level: error | warn | log | info | debug }', () => {
+    beforeEach((done) => {
+      if (console.isProxied) console.reset();
+      sandbox2.restore();
+      Object.keys(levels.consoleLevels).forEach((level) => {
+        if (console[level].restore) console[level].restore();
+        logstub[level] = sandbox2.spy(console, level);
+      });
+      done();
+    });
+    it('"unknown" (fallback to debug)', async () => {
+      const logmessage = 'logmessage';
+      log(console, {
+        type: 'json',
+        level: 'unknown',
+        override: true,
+      });
+      console.debug(logmessage);
+      console.info(logmessage);
+      console.log(logmessage);
+      console.warn(logmessage);
+      console.error(logmessage);
+      const result = {
+        message: logmessage,
+        timestamp: new Date().toISOString(),
+        type: ['technical'],
+        level: 'INFO',
+        correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
+      };
+      sinon.assert.calledWith(logstub.debug, { ...result, level: 'DEBUG' });
+      sinon.assert.calledWith(logstub.info, { ...result, level: 'INFO' });
+      sinon.assert.calledWith(logstub.log, { ...result, level: 'INFO' });
+      sinon.assert.calledWith(logstub.warn, { ...result, level: 'WARN' });
+      sinon.assert.calledWith(logstub.error, { ...result, level: 'ERROR' });
+      expect(result).to.be.jsonSchema(logschema);
+    });
+    it('"debug"', async () => {
+      const logmessage = 'logmessage';
+      log(console, {
+        type: 'json',
+        level: 'debug',
+        override: true,
+      });
+      console.debug(logmessage);
+      console.info(logmessage);
+      console.log(logmessage);
+      console.warn(logmessage);
+      console.error(logmessage);
+      const result = {
+        message: logmessage,
+        timestamp: new Date().toISOString(),
+        type: ['technical'],
+        level: 'INFO',
+        correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
+      };
+      sinon.assert.calledWith(logstub.debug, { ...result, level: 'DEBUG' });
+      sinon.assert.calledWith(logstub.info, { ...result, level: 'INFO' });
+      sinon.assert.calledWith(logstub.log, { ...result, level: 'INFO' });
+      sinon.assert.calledWith(logstub.warn, { ...result, level: 'WARN' });
+      sinon.assert.calledWith(logstub.error, { ...result, level: 'ERROR' });
+      expect(result).to.be.jsonSchema(logschema);
+    });
+    it('"info"', async () => {
+      const logmessage = 'logmessage';
+      log(console, {
+        type: 'json',
+        level: 'info',
+        override: true,
+      });
+      console.debug(logmessage);
+      console.info(logmessage);
+      console.log(logmessage);
+      console.warn(logmessage);
+      console.error(logmessage);
+      const result = {
+        message: logmessage,
+        timestamp: new Date().toISOString(),
+        type: ['technical'],
+        level: 'INFO',
+        correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
+      };
+      sinon.assert.notCalled(logstub.debug);
+      sinon.assert.calledWith(logstub.info, { ...result, level: 'INFO' });
+      sinon.assert.calledWith(logstub.log, { ...result, level: 'INFO' });
+      sinon.assert.calledWith(logstub.warn, { ...result, level: 'WARN' });
+      sinon.assert.calledWith(logstub.error, { ...result, level: 'ERROR' });
+      expect(result).to.be.jsonSchema(logschema);
+    });
+    it('"log"', async () => {
+      const logmessage = 'logmessage';
+      log(console, {
+        type: 'json',
+        level: 'log',
+        override: true,
+      });
+      console.debug(logmessage);
+      console.info(logmessage);
+      console.log(logmessage);
+      console.warn(logmessage);
+      console.error(logmessage);
+      const result = {
+        message: logmessage,
+        timestamp: new Date().toISOString(),
+        type: ['technical'],
+        level: 'INFO',
+        correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
+      };
+      sinon.assert.notCalled(logstub.debug);
+      sinon.assert.notCalled(logstub.info);
+      sinon.assert.calledWith(logstub.log, { ...result, level: 'INFO' });
+      sinon.assert.calledWith(logstub.warn, { ...result, level: 'WARN' });
+      sinon.assert.calledWith(logstub.error, { ...result, level: 'ERROR' });
+      expect(result).to.be.jsonSchema(logschema);
+    });
+    it('"warn"', async () => {
+      const logmessage = 'logmessage';
+      log(console, {
+        type: 'json',
+        level: 'warn',
+        override: true,
+      });
+      console.debug(logmessage);
+      console.info(logmessage);
+      console.log(logmessage);
+      console.warn(logmessage);
+      console.error(logmessage);
+      const result = {
+        message: logmessage,
+        timestamp: new Date().toISOString(),
+        type: ['technical'],
+        level: 'INFO',
+        correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
+      };
+      sinon.assert.notCalled(logstub.debug);
+      sinon.assert.notCalled(logstub.info);
+      sinon.assert.notCalled(logstub.log);
+      sinon.assert.calledWith(logstub.warn, { ...result, level: 'WARN' });
+      sinon.assert.calledWith(logstub.error, { ...result, level: 'ERROR' });
+      expect(result).to.be.jsonSchema(logschema);
+    });
+    it('"error"', async () => {
+      const logmessage = 'logmessage';
+      log(console, {
+        type: 'json',
+        level: 'error',
+        override: true,
+      });
+      console.debug(logmessage);
+      console.info(logmessage);
+      console.log(logmessage);
+      console.warn(logmessage);
+      console.error(logmessage);
+      const result = {
+        message: logmessage,
+        timestamp: new Date().toISOString(),
+        type: ['technical'],
+        level: 'INFO',
+        correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
+      };
+      sinon.assert.notCalled(logstub.debug);
+      sinon.assert.notCalled(logstub.info);
+      sinon.assert.notCalled(logstub.log);
+      sinon.assert.notCalled(logstub.warn);
+      sinon.assert.calledWith(logstub.error, { ...result, level: 'ERROR' });
+      expect(result).to.be.jsonSchema(logschema);
+    });
+  });
   it('axios error', async () => {
     const logger = log(console, {
       type: 'log',

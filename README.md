@@ -42,10 +42,11 @@ $ yarn add @digipolis/log
 ## Configuration
 
 ### Params:
-| Param                       | Description                                | Values                                               |
-| :---                        | :---                                       | :---                                                 |
-| ***type*** *(optional)*     | Set logging mode                           | **log** (default) / **json** / **text** / **silent** |
-| ***override*** *(optional)* | Set to override given console (default)    | **true** / **false** (default)                       |
+| Param                       | Description                                              | Values                                                           |
+| :---                        | :---                                                     | :---                                                             |
+| ***type*** *(optional)*     | Set logging mode                                         | **log** (default) / **json** / **text** / **silent**             |
+| ***override*** *(optional)* | Set to override given console (default)                  | **true** / **false** (default)                                   |
+| ***level*** *(optional)*    | Set the log level (given level and higher will be logged | **debug** / **info** / **log** / **warn** / **error** (default)  |
 
 ## Examples
 
