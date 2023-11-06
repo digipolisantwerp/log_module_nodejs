@@ -42,10 +42,11 @@ $ yarn add @digipolis/log
 ## Configuration
 
 ### Params:
-| Param                       | Description                                | Values                                               |
-| :---                        | :---                                       | :---                                                 |
-| ***type*** *(optional)*     | Set logging mode                           | **log** (default) / **json** / **text** / **silent** |
-| ***override*** *(optional)* | Set to override given console (default)    | **true** / **false** (default)                       |
+| Param                       | Description                                              | Values                                                           |
+| :---                        | :---                                                     | :---                                                             |
+| ***type*** *(optional)*     | Set logging mode                                         | **log** (default) / **json** / **text** / **silent**             |
+| ***override*** *(optional)* | Set to override given console (default)                  | **true** / **false** (default)                                   |
+| ***level*** *(optional)*    | Set the log level (given level and higher will be logged | **debug** (default) / **info** / **log** / **warn** / **error**  |
 
 ## Examples
 
@@ -91,6 +92,18 @@ mylogger.log('hello');
 type: 'log' -> {"message":"hello","timestamp":"2021-12-01T09:45:56.515Z","type":["technical"],"level":"INFO","correlationId":""}
 */
 
+const mylogger = digipolisLogger(console, {
+  type: 'log', // log(default) | json | text
+  override: false, // false(default) | true
+  level: "error", // debug(default) | info | log | warn | error
+});
+// log for kibana json for production only error
+mylogger.log('logmessage'); // -> won't be visible
+mylogger.error('error');
+/*
+type: 'log' ->
+type: 'error' -> {"message":"error","timestamp":"2021-12-01T09:45:56.515Z","type":["technical"],"level":"ERROR","correlationId":""}
+*/
 ```
 ##### Example (override the global log (this will impact more than just your code)):
 ```javascript
