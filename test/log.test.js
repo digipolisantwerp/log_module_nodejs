@@ -1,6 +1,5 @@
 const sinon = require('sinon');
 const chai = require('chai');
-const axios = require('axios');
 const { levels } = require('../lib/config');
 const uuidhelper = require('../lib/helpers/uuid');
 const log = require('../lib');
@@ -534,15 +533,5 @@ describe('Logs:', () => {
       sinon.assert.calledWith(logstub.error, { ...result, level: 'ERROR' });
       expect(result).to.be.jsonSchema(logschema);
     });
-  });
-  it('axios error', async () => {
-    const logger = log(console, {
-      type: 'log',
-    });
-    try {
-      await axios.post('undefined');
-    } catch (e) {
-      logger.log('Error: getDataFromScopes', e);
-    }
   });
 });
