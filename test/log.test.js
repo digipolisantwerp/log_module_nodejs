@@ -340,7 +340,7 @@ describe('Logs:', () => {
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, 'INFO:', new Date().toISOString(), logmessage);
     });
-    it('{ message: "logmessage", extraparam: "extravalue" }', async () => {
+    it('error { message: "logmessage", extraparam: "extravalue" }', async () => {
       const logmessage = { message: 'logmessage', extraparam: 'extravalue' };
       log(console, {
         type: 'text',

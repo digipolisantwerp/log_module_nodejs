@@ -3,7 +3,7 @@ const { setBooleanValue } = require('../lib/config');
 
 describe('Config Helper', () => {
   describe('setBooleanValue', () => {
-    it('true should result in true', () => expect(setBooleanValue(undefined, true)).to.equal(true));
+    it('undefined should result in true', () => expect(setBooleanValue(undefined, true)).to.equal(true));
     it('true should result in true', () => expect(setBooleanValue(true)).to.equal(true));
     it('\'true\' should result in true', () => expect(setBooleanValue('true')).to.equal(true));
     it('false should result in false', () => expect(setBooleanValue(false)).to.equal(false));

@@ -69,7 +69,7 @@ describe('log levels:', () => {
       });
     });
   });
-  describe('log', () => {
+  describe('log no override', () => {
     it('"logmessage"', async () => {
       const logmessage = 'logmessage';
       log(console, {

@@ -38,7 +38,7 @@ describe('Logs: -> ', () => {
     console.log('hello');
     sinon.assert.calledWith(logstub.log, 'hello');
   });
-  it('default log', async () => {
+  it('json log', async () => {
     const requestlogger = log(console, {
       type: 'json',
     });
