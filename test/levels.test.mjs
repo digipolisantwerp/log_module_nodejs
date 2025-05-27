@@ -1,6 +1,6 @@
-const sinon = require('sinon');
-const log = require('../lib');
-const { levels } = require('../lib/config');
+import sinon from 'sinon';
+import log from '../lib/index.js';
+import { levels } from '../lib/config/index.js';
 
 const v4 = /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$|/i;
 

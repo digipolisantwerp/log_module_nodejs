@@ -4,7 +4,7 @@ import pluginJs from "@eslint/js";
 
 
 export default [
-    mochaPlugin.configs.flat.recommended,
+    mochaPlugin.configs.recommended,
     {
         files: ["**/*.js"],
         languageOptions: {sourceType: "commonjs"}
