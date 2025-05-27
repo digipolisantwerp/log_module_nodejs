@@ -1,7 +1,7 @@
-const crypto = require('crypto');
-const sinon = require('sinon');
-const { expect } = require('chai');
-const uuidHelper = require('../lib/helpers/uuid');
+import crypto from 'crypto';
+import sinon from 'sinon';
+import { expect } from 'chai';
+import uuidHelper from '../lib/helpers/uuid.js';
 
 const v4 = /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i;
 

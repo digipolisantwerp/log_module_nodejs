@@ -1,10 +1,9 @@
-const sinon = require('sinon');
-const chai = require('chai');
-const { levels } = require('../lib/config');
-const log = require('../lib');
+import sinon from 'sinon';
+import * as chai from 'chai';
+import { levels } from '../lib/config/index.js';
+import log from '../lib/index.js';
 
 const { expect } = chai;
-chai.use(require('chai-json-schema'));
 
 describe('Logs:', () => {
   let sandbox;

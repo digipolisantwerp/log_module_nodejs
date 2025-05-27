@@ -1,14 +1,15 @@
-const sinon = require('sinon');
-const chai = require('chai');
-const { levels } = require('../lib/config');
-const uuidhelper = require('../lib/helpers/uuid');
-const log = require('../lib');
-const logschema = require('./data/logschema.json');
+import sinon from 'sinon';
+import * as chai from 'chai';
+import { levels } from '../lib/config/index.js';
+import uuidhelper from '../lib/helpers/uuid.js';
+import log from '../lib/index.js';
+import logschema from './data/logschema.json' with { type: "json"  };
+import chaijson from 'chai-json-schema';
 
 const v4 = /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$|/i;
 
 const { expect } = chai;
-chai.use(require('chai-json-schema'));
+chai.use(chaijson);
 
 describe('Logs:', () => {
   let sandbox;

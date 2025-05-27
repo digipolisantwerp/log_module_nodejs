@@ -1,5 +1,5 @@
-const { expect } = require('chai');
-const { setBooleanValue } = require('../lib/config');
+import { expect } from 'chai';
+import { setBooleanValue } from '../lib/config/index.js';
 
 describe('Config Helper', () => {
   describe('setBooleanValue', () => {

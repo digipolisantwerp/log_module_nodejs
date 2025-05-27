@@ -1,8 +1,6 @@
-const sinon = require('sinon');
-const chai = require('chai');
-const { levels } = require('../lib/config');
-const log = require('../lib');
-chai.use(require('chai-json-schema'));
+import sinon from 'sinon';
+import { levels } from '../lib/config/index.js';
+import log from '../lib/index.js';
 
 const v4 = /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$|/i;
 
