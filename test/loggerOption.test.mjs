@@ -2,10 +2,8 @@ import sinon from 'sinon';
 import * as chai from 'chai';
 import { levels } from '../lib/config/index.js';
 import log from '../lib/index.js';
-import chaijson from 'chai-json-schema';
 
 const { expect } = chai;
-chai.use(chaijson);
 
 describe('Logs:', () => {
   let sandbox;
