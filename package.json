@@ -29,5 +29,10 @@
     "eslint-plugin-mocha": "^11.1.0",
     "mocha": "^11.7.1",
     "sinon": "^21.0.0"
+  },
+  "overrides": {
+    "chai-json-schema": {
+      "chai": "^5.2.0"
+    }
   }
 }
