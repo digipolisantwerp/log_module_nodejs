@@ -1,9 +1,7 @@
+import assert from 'node:assert/strict';
 import sinon from 'sinon';
-import * as chai from 'chai';
 import { levels } from '../lib/config/index.js';
 import log from '../lib/index.js';
-
-const { expect } = chai;
 
 describe('Logs:', () => {
   let sandbox;
@@ -43,38 +41,38 @@ describe('Logs:', () => {
         type: 'json',
         override: false,
       });
-      expect(returnedlogger.log.isProxy).to.eql(true);
-      expect(console.log.isProxy).to.eql(undefined);
+      assert.equal(returnedlogger.log.isProxy, true);
+      assert.equal(console.log.isProxy, undefined);
     });
     it('"isProxy"', async () => {
       log(console, {
         type: 'json',
         override: true,
       });
-      expect(console.log.isProxy).to.eql(true);
+      assert.equal(console.log.isProxy, true);
     });
     it('"override": true (default)', async () => {
       const returnedlogger = log(console, {
         type: 'json',
         override: true,
       });
-      expect(returnedlogger.log.isProxy).to.eql(true);
-      expect(console.log.isProxy).to.eql(true);
+      assert.equal(returnedlogger.log.isProxy, true);
+      assert.equal(console.log.isProxy, true);
     });
     it('"override": true (set)', async () => {
       const returnedlogger = log(console, {
         type: 'json',
         override: true,
       });
-      expect(returnedlogger.log.isProxy).to.eql(true);
-      expect(console.log.isProxy).to.eql(true);
+      assert.equal(returnedlogger.log.isProxy, true);
+      assert.equal(console.log.isProxy, true);
     });
     it('"getprop cover', async () => {
       const returnedlogger = log(console, {
         type: 'json',
         override: true,
       });
-      expect(returnedlogger.log.prop).to.eql(undefined);
+      assert.equal(returnedlogger.log.prop, undefined);
     });
   });
 });

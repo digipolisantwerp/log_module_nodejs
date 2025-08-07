@@ -1,15 +1,13 @@
+import assert from 'node:assert/strict';
 import sinon from 'sinon';
-import * as chai from 'chai';
 import { levels } from '../lib/config/index.js';
 import uuidhelper from '../lib/helpers/uuid.js';
 import log from '../lib/index.js';
 import logschema from './data/logschema.json' with { type: "json"  };
-import chaijson from 'chai-json-schema';
+import { Validator } from 'jsonschema';
 
 const v4 = /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$|/i;
-
-const { expect } = chai;
-chai.use(chaijson);
+const validator = new Validator();
 
 describe('Logs:', () => {
   let sandbox;
@@ -60,7 +58,7 @@ describe('Logs:', () => {
         correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
       };
       sinon.assert.calledWith(logstub.log, result);
-      expect(result).to.be.jsonSchema(logschema);
+      assert.equal(validator.validate(result, logschema).valid ,true)
     });
     it('{ message: "logmessage" }', async () => {
       const logmessage = { message: 'logmessage' };
@@ -77,7 +75,7 @@ describe('Logs:', () => {
         correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
       };
       sinon.assert.calledWith(logstub.log, result);
-      expect(result).to.be.jsonSchema(logschema);
+      assert.equal(validator.validate(result, logschema).valid ,true)
     });
     it('{ timestamp: "timestamp" }', async () => {
       const logmessage = { timestamp: 'timestamp' };
@@ -402,7 +400,7 @@ describe('Logs:', () => {
       sinon.assert.calledWith(logstub.log, { ...result, level: 'INFO' });
       sinon.assert.calledWith(logstub.warn, { ...result, level: 'WARN' });
       sinon.assert.calledWith(logstub.error, { ...result, level: 'ERROR' });
-      expect(result).to.be.jsonSchema(logschema);
+      assert.equal(validator.validate(result, logschema).valid ,true)
     });
     it('"debug"', async () => {
       const logmessage = 'logmessage';
@@ -428,7 +426,7 @@ describe('Logs:', () => {
       sinon.assert.calledWith(logstub.log, { ...result, level: 'INFO' });
       sinon.assert.calledWith(logstub.warn, { ...result, level: 'WARN' });
       sinon.assert.calledWith(logstub.error, { ...result, level: 'ERROR' });
-      expect(result).to.be.jsonSchema(logschema);
+      assert.equal(validator.validate(result, logschema).valid ,true)
     });
     it('"info"', async () => {
       const logmessage = 'logmessage';
@@ -454,7 +452,7 @@ describe('Logs:', () => {
       sinon.assert.calledWith(logstub.log, { ...result, level: 'INFO' });
       sinon.assert.calledWith(logstub.warn, { ...result, level: 'WARN' });
       sinon.assert.calledWith(logstub.error, { ...result, level: 'ERROR' });
-      expect(result).to.be.jsonSchema(logschema);
+      assert.equal(validator.validate(result, logschema).valid ,true)
     });
     it('"log"', async () => {
       const logmessage = 'logmessage';
@@ -480,7 +478,7 @@ describe('Logs:', () => {
       sinon.assert.calledWith(logstub.log, { ...result, level: 'INFO' });
       sinon.assert.calledWith(logstub.warn, { ...result, level: 'WARN' });
       sinon.assert.calledWith(logstub.error, { ...result, level: 'ERROR' });
-      expect(result).to.be.jsonSchema(logschema);
+      assert.equal(validator.validate(result, logschema).valid ,true)
     });
     it('"warn"', async () => {
       const logmessage = 'logmessage';
@@ -506,7 +504,7 @@ describe('Logs:', () => {
       sinon.assert.notCalled(logstub.log);
       sinon.assert.calledWith(logstub.warn, { ...result, level: 'WARN' });
       sinon.assert.calledWith(logstub.error, { ...result, level: 'ERROR' });
-      expect(result).to.be.jsonSchema(logschema);
+      assert.equal(validator.validate(result, logschema).valid ,true)
     });
     it('"error"', async () => {
       const logmessage = 'logmessage';
@@ -532,7 +530,7 @@ describe('Logs:', () => {
       sinon.assert.notCalled(logstub.log);
       sinon.assert.notCalled(logstub.warn);
       sinon.assert.calledWith(logstub.error, { ...result, level: 'ERROR' });
-      expect(result).to.be.jsonSchema(logschema);
+      assert.equal(validator.validate(result, logschema).valid ,true)
     });
   });
 });
