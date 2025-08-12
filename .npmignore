@@ -3,6 +3,7 @@
 .editorconfig
 .env
 .eslintignore
+eslint.config.mjs
 .eslintrc.json
 .nyc_output
 .travis.yml
