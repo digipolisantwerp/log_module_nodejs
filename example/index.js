@@ -9,6 +9,7 @@ const mylogger = digipolisLogger(console, configuration);
 
 mylogger.log('hello');
 mylogger.log('hello');
+mylogger.log('something went wrong', new Error("wupsi"));
 mylogger.log({ message: 'logmessage2', timestamp: 'timestamp123' });
 const err = new Error('Errormessage');
 mylogger.error(err);

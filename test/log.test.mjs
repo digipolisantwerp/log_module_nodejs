@@ -3,7 +3,7 @@ import sinon from 'sinon';
 import { levels } from '../lib/config/index.js';
 import uuidhelper from '../lib/helpers/uuid.js';
 import log from '../lib/index.js';
-import logschema from './data/logschema.json' with { type: "json"  };
+import logschema from './data/logschema.json' with { type: "json" };
 import { Validator } from 'jsonschema';
 
 const v4 = /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$|/i;
@@ -69,6 +69,23 @@ describe('Logs:', () => {
       console.log(logmessage);
       const result = {
         message: 'logmessage',
+        timestamp: new Date().toISOString(),
+        type: ['technical'],
+        level: 'INFO',
+        correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
+      };
+      sinon.assert.calledWith(logstub.log, result);
+      assert.equal(validator.validate(result, logschema).valid ,true)
+    });
+    it('test, { x: "y" }', async () => {
+      const logmessage = { x: 'y' };
+      log(console, {
+        type: 'json',
+        override: true,
+      });
+      console.log('test', logmessage);
+      const result = {
+        message: 'test Extrainfo: {"x":"y"}',
         timestamp: new Date().toISOString(),
         type: ['technical'],
         level: 'INFO',
@@ -171,6 +188,25 @@ describe('Logs:', () => {
         correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
       });
     });
+    it('message, new Error(\'errormessage\')', async () => {
+      const logmessage = new Error('errormessage');
+      logmessage.stack = `
+  stack
+  stack
+  stack`;
+      log(console, {
+        type: 'json',
+        override: true,
+      });
+      console.log('message', logmessage);
+      sinon.assert.calledWith(logstub.log, {
+        message: 'message errormessage \n  stack\n  stack\n  stack',
+        timestamp: new Date().toISOString(),
+        type: ['technical'],
+        level: 'INFO',
+        correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
+      });
+    });
   });
   describe('{ type: silent }', () => {
     it('"logmessage"', async () => {
@@ -185,7 +221,7 @@ describe('Logs:', () => {
     });
   });
   describe('{ type: log }', () => {
-    it('"logmessage"', async () => {
+        it('"logmessage"', async () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'log',
@@ -292,6 +328,23 @@ describe('Logs:', () => {
         message: 'logmessage Extrainfo: {"extraparam":"[Buffer]"}',
       }));
     });
+  });
+  it('"logmessage1", "logmessage2"', async () => {
+    const logmessage = 'logmessage';
+    const logmessage2 = 'logmessage2';
+    log(console, {
+      type: 'log',
+      override: true,
+    });
+    console.log(logmessage, logmessage2);
+    const result = JSON.stringify({
+      timestamp: new Date().toISOString(),
+      type: ['technical'],
+      level: 'INFO',
+      correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
+      message: `${logmessage} ${logmessage2}`,
+    });
+    sinon.assert.calledWith(logstub.log, result);
   });
   describe('{ type: text }', () => {
     it('"logmessage"', async () => {
