@@ -13,7 +13,7 @@
     "start": "node --watch ./example/index.js",
     "test": "node --test --test-force-exit",
     "lint": "eslint \"**/*.js\"",
-    "coverage": "node --test --experimental-test-coverage --test-coverage-exclude='test/*.mjs' --test-reporter=spec --test-reporter-destination=stdout --test-reporter=lcov --test-reporter-destination=lcov.info --test-force-exit"
+    "coverage": "node --test --experimental-test-coverage --test-coverage-exclude='test/*.mjs' --test-reporter=spec --test-reporter-destination=stdout --test-reporter=lcov --test-reporter-destination=./coverage/lcov.info --test-force-exit"
   },
   "repository": {
     "type": "git",
