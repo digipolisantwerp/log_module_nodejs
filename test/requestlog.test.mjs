@@ -1,16 +1,17 @@
 import sinon from 'sinon';
+import { test, describe, before, beforeEach, after, afterEach } from 'node:test';
 import { levels } from '../lib/config/index.js';
 import log from '../lib/index.js';
 
 const v4 = /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$|/i;
 
-describe('Logs: -> ', () => {
+describe('Logs: -> ', async () => {
   let sandbox;
   let sandbox2;
   let clock;
   const logstub = {};
 
-  before((done) => {
+  before(() => {
     if (console.isProxied) console.reset();
     sandbox2 = sinon.createSandbox();
     Object.keys(levels.consoleLevels).forEach((level) => {
@@ -18,25 +19,22 @@ describe('Logs: -> ', () => {
       logstub[level] = sandbox2.spy(console, level);
     });
     clock = sinon.useFakeTimers(Date.now());
-    done();
   });
-  after((done) => {
+  after(() => {
     clock.restore();
     sandbox2.restore();
-    done();
   });
-  beforeEach((done) => {
+  beforeEach(() => {
     sandbox = sinon.createSandbox();
-    done();
   });
   afterEach(() => {
     sandbox.restore();
   });
-  it('default log', async () => {
+  test('default log', async () => {
     console.log('hello');
     sinon.assert.calledWith(logstub.log, 'hello');
   });
-  it('json log', async () => {
+  test('json log', async () => {
     const requestlogger = log(console, {
       type: 'json',
     });
@@ -49,8 +47,8 @@ describe('Logs: -> ', () => {
       message: '1 2 3',
     });
   });
-  describe('{ type: json }', () => {
-    it('"requestlog"', async () => {
+  await describe('{ type: json }', async () => {
+    test('"requestlog"', async () => {
       const requestlogger = log(console, {
         type: 'json',
         override: false,
