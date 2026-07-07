@@ -1,21 +1,21 @@
+import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { setBooleanValue } from '../lib/config/index.js';
 
-describe('Config Helper', () => {
-  describe('setBooleanValue', () => {
-    it('undefined should result in true', () => assert.equal(setBooleanValue(undefined, true) ,true));
-    it('true should result in true', () => assert.equal(setBooleanValue(true) ,true));
-    it('\'true\' should result in true', () => assert.equal(setBooleanValue('true') ,true));
-    it('false should result in false', () => assert.equal(setBooleanValue(false) ,false));
-    it('\'false\' should result in false', () => assert.equal(setBooleanValue('false') ,false));
-    it('default true, false should result in false', () => assert.equal(setBooleanValue(false, true) ,false));
-    it('default true, \'false\' should result in false', () => assert.equal(setBooleanValue('false', true) ,false));
-    it('default true, \'true\' should result in true', () => assert.equal(setBooleanValue('true', true) ,true));
-    it('default false, \'false\' should result in false', () => assert.equal(setBooleanValue('false', false) ,false));
-    it('default false, \'true\' should result in true', () => assert.equal(setBooleanValue('true', false) ,true));
-    it('default false, \'\' should result in true', () => assert.equal(setBooleanValue('', false) ,false));
-    it('default true, \'\' should result in true', () => assert.equal(setBooleanValue('', true) ,true));
-    it('default true, \'nonbool\' should result in true', () => assert.equal(setBooleanValue('nonbool', true) ,true));
-    it('default false, \'nonbool\' should result in false', () => assert.equal(setBooleanValue('nonbool', false) ,false));
-  });
+describe('Config Helper', async () => {
+    await describe('setBooleanValue', async () => {
+        await test('true should result in true', () => assert.deepEqual(setBooleanValue(true), true));
+        await test('\'true\' should result in true', () => assert.deepEqual(setBooleanValue('true'), true));
+        await test('false should result in false', () => assert.deepEqual(setBooleanValue(false), false));
+        await test('\'false\' should result in false', () => assert.deepEqual(setBooleanValue('false'), false));
+        await test('default true, false should result in false', () => assert.deepEqual(setBooleanValue(false, true), false));
+        await test('default true, \'false\' should result in false', () => assert.deepEqual(setBooleanValue('false', true), false));
+        await test('default true, \'true\' should result in true', () => assert.deepEqual(setBooleanValue('true', true), true));
+        await test('default false, \'false\' should result in false', () => assert.deepEqual(setBooleanValue('false', false), false));
+        await test('default false, \'true\' should result in true', () => assert.deepEqual(setBooleanValue('true', false), true));
+        await test('default false, \'\' should result in true', () => assert.deepEqual(setBooleanValue('', false), false));
+        await test('default true, \'\' should result in true', () => assert.deepEqual(setBooleanValue('', true), true));
+        await test('default true, \'nonbool\' should result in true', () => assert.deepEqual(setBooleanValue('nonbool', true), true));
+        await test('default false, \'nonbool\' should result in false', () => assert.deepEqual(setBooleanValue('nonbool', false), false));
+    });
 });

@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import sinon from 'sinon';
+import { test, describe, before, beforeEach, after, afterEach } from 'node:test';
 import { levels } from '../lib/config/index.js';
 import uuidhelper from '../lib/helpers/uuid.js';
 import log from '../lib/index.js';
@@ -9,13 +10,13 @@ import { Validator } from 'jsonschema';
 const v4 = /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$|/i;
 const validator = new Validator();
 
-describe('Logs:', () => {
+describe('Logs:', async () => {
   let sandbox;
   let sandbox2;
   let clock;
   const logstub = {};
 
-  before((done) => {
+  before(async () => {
     if (console.isProxied) console.reset();
     sandbox2 = sinon.createSandbox();
     Object.keys(levels.consoleLevels).forEach((level) => {
@@ -23,27 +24,24 @@ describe('Logs:', () => {
       logstub[level] = sandbox2.spy(console, level);
     });
     clock = sinon.useFakeTimers(Date.now());
-    done();
   });
-  after((done) => {
+  after(async () => {
     clock.restore();
     sandbox2.restore();
-    done();
   });
-  beforeEach((done) => {
+  beforeEach(async() => {
     sandbox = sinon.createSandbox();
     sandbox.stub(uuidhelper, 'uuidV4').returns('ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF');
-    done();
   });
-  afterEach(() => {
+  afterEach(async() => {
     sandbox.restore();
   });
-  it('default log', async () => {
+  test('default log', async () => {
     console.log('hello');
     sinon.assert.calledWith(logstub.log, 'hello');
   });
-  describe('{ type: json }', () => {
-    it('"logmessage"', async () => {
+  await describe('{ type: json }', async () => {
+    test('"logmessage"', async () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'json',
@@ -60,7 +58,7 @@ describe('Logs:', () => {
       sinon.assert.calledWith(logstub.log, result);
       assert.equal(validator.validate(result, logschema).valid ,true)
     });
-    it('{ message: "logmessage" }', async () => {
+    test('{ message: "logmessage" }', async () => {
       const logmessage = { message: 'logmessage' };
       log(console, {
         type: 'json',
@@ -77,7 +75,7 @@ describe('Logs:', () => {
       sinon.assert.calledWith(logstub.log, result);
       assert.equal(validator.validate(result, logschema).valid ,true)
     });
-    it('test, { x: "y" }', async () => {
+    test('test, { x: "y" }', async () => {
       const logmessage = { x: 'y' };
       log(console, {
         type: 'json',
@@ -94,7 +92,7 @@ describe('Logs:', () => {
       sinon.assert.calledWith(logstub.log, result);
       assert.equal(validator.validate(result, logschema).valid ,true)
     });
-    it('{ timestamp: "timestamp" }', async () => {
+    test('{ timestamp: "timestamp" }', async () => {
       const logmessage = { timestamp: 'timestamp' };
       log(console, {
         type: 'json',
@@ -109,7 +107,7 @@ describe('Logs:', () => {
       };
       sinon.assert.calledWith(logstub.log, result);
     });
-    it('{ message: "logmessage", timestamp: "timestamp" }', async () => {
+    test('{ message: "logmessage", timestamp: "timestamp" }', async () => {
       const logmessage = { message: 'logmessage', timestamp: 'timestamp' };
       log(console, {
         type: 'json',
@@ -124,7 +122,7 @@ describe('Logs:', () => {
         correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
       });
     });
-    it('{ message: "logmessage", type: "mytype" }', async () => {
+    test('{ message: "logmessage", type: "mytype" }', async () => {
       const logmessage = { message: 'logmessage', type: 'mytype' };
       log(console, {
         type: 'json',
@@ -139,7 +137,7 @@ describe('Logs:', () => {
         correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
       });
     });
-    it('{ message: "logmessage", type: ["mytype", "mytype2"] }', async () => {
+    test('{ message: "logmessage", type: ["mytype", "mytype2"] }', async () => {
       const logmessage = { message: 'logmessage', type: ['mytype', 'mytype2'] };
       log(console, {
         type: 'json',
@@ -154,7 +152,7 @@ describe('Logs:', () => {
         correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
       });
     });
-    it('{ message: "logmessage", extraparam: "extravalue" }', async () => {
+    test('{ message: "logmessage", extraparam: "extravalue" }', async () => {
       const logmessage = { message: 'logmessage', extraparam: 'extravalue' };
       log(console, {
         type: 'json',
@@ -169,7 +167,7 @@ describe('Logs:', () => {
         message: 'logmessage Extrainfo: {"extraparam":"extravalue"}',
       });
     });
-    it('new Error(\'errormessage\')', async () => {
+    test('new Error(\'errormessage\')', async () => {
       const logmessage = new Error('errormessage');
       logmessage.stack = `
   stack
@@ -188,7 +186,7 @@ describe('Logs:', () => {
         correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
       });
     });
-    it('message, new Error(\'errormessage\')', async () => {
+    test('message, new Error(\'errormessage\')', async () => {
       const logmessage = new Error('errormessage');
       logmessage.stack = `
   stack
@@ -208,8 +206,8 @@ describe('Logs:', () => {
       });
     });
   });
-  describe('{ type: silent }', () => {
-    it('"logmessage"', async () => {
+  await describe('{ type: silent }', async () => {
+    test('"logmessage"', async () => {
       logstub.log.resetHistory();
       const logmessage = 'logmessage';
       log(console, {
@@ -220,8 +218,8 @@ describe('Logs:', () => {
       sinon.assert.notCalled(logstub.log);
     });
   });
-  describe('{ type: log }', () => {
-        it('"logmessage"', async () => {
+  await describe('{ type: log }', async () => {
+        test('"logmessage"', async () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'log',
@@ -237,7 +235,7 @@ describe('Logs:', () => {
       });
       sinon.assert.calledWith(logstub.log, result);
     });
-    it('"logmessage" fallback to log for unknown', async () => {
+    test('"logmessage" fallback to log for unknown', async () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'unknown-log-type',
@@ -253,7 +251,7 @@ describe('Logs:', () => {
       });
       sinon.assert.calledWith(logstub.log, result);
     });
-    it('{ message: "logmessage" }', async () => {
+    test('{ message: "logmessage" }', async () => {
       const logmessage = { message: 'logmessage' };
       log(console, {
         type: 'log',
@@ -268,7 +266,7 @@ describe('Logs:', () => {
         message: logmessage.message,
       }));
     });
-    it('{ timestamp: "timestamp" }', async () => {
+    test('{ timestamp: "timestamp" }', async () => {
       const logmessage = { timestamp: 'timestamp' };
       log(console, {
         type: 'log',
@@ -282,7 +280,7 @@ describe('Logs:', () => {
         correlationId: 'ABCDEFAB-ABCD-4ABC-AABC-ABCDEFABCDEF',
       }));
     });
-    it('{ message: "logmessage", timestamp: "timestamp" }', async () => {
+    test('{ message: "logmessage", timestamp: "timestamp" }', async () => {
       const logmessage = { message: 'logmessage', timestamp: 'timestamp' };
       log(console, {
         type: 'log',
@@ -297,7 +295,7 @@ describe('Logs:', () => {
         message: logmessage.message,
       }));
     });
-    it('{ message: "logmessage", extraparam: "extravalue" }', async () => {
+    test('{ message: "logmessage", extraparam: "extravalue" }', async () => {
       const logmessage = { message: 'logmessage', extraparam: 'extravalue' };
       log(console, {
         type: 'log',
@@ -312,7 +310,7 @@ describe('Logs:', () => {
         message: 'logmessage Extrainfo: {"extraparam":"extravalue"}',
       }));
     });
-    it('{ message: "logmessage", extraparam: buffer }', async () => {
+    test('{ message: "logmessage", extraparam: buffer }', async () => {
       const buffer = Buffer.from('smdlfkjmsldjfmlskdjfmlskjfmlksdjflskdjf');
       const logmessage = { message: 'logmessage', extraparam: buffer };
       log(console, {
@@ -329,7 +327,7 @@ describe('Logs:', () => {
       }));
     });
   });
-  it('"logmessage1", "logmessage2"', async () => {
+  test('"logmessage1", "logmessage2"', async () => {
     const logmessage = 'logmessage';
     const logmessage2 = 'logmessage2';
     log(console, {
@@ -346,8 +344,8 @@ describe('Logs:', () => {
     });
     sinon.assert.calledWith(logstub.log, result);
   });
-  describe('{ type: text }', () => {
-    it('"logmessage"', async () => {
+  await describe('{ type: text }', async () => {
+    test('"logmessage"', async () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'text',
@@ -356,7 +354,7 @@ describe('Logs:', () => {
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, 'INFO:', new Date().toISOString(), logmessage);
     });
-    it('{ message: "logmessage" }', async () => {
+    test('{ message: "logmessage" }', async () => {
       const logmessage = { message: 'logmessage' };
       log(console, {
         type: 'text',
@@ -365,7 +363,7 @@ describe('Logs:', () => {
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, 'INFO:', new Date().toISOString(), logmessage);
     });
-    it('{ timestamp: "timestamp" }', async () => {
+    test('{ timestamp: "timestamp" }', async () => {
       const logmessage = { timestamp: 'timestamp' };
       log(console, {
         type: 'text',
@@ -374,7 +372,7 @@ describe('Logs:', () => {
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, 'INFO:', new Date().toISOString(), logmessage);
     });
-    it('{ message: "logmessage", timestamp: "timestamp" }', async () => {
+    test('{ message: "logmessage", timestamp: "timestamp" }', async () => {
       const logmessage = { message: 'logmessage', timestamp: 'timestamp' };
       log(console, {
         type: 'text',
@@ -383,7 +381,7 @@ describe('Logs:', () => {
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, 'INFO:', new Date().toISOString(), logmessage);
     });
-    it('{ message: "logmessage", extraparam: "extravalue" }', async () => {
+    test('{ message: "logmessage", extraparam: "extravalue" }', async () => {
       const logmessage = { message: 'logmessage', extraparam: 'extravalue' };
       log(console, {
         type: 'text',
@@ -392,7 +390,7 @@ describe('Logs:', () => {
       console.log(logmessage);
       sinon.assert.calledWith(logstub.log, 'INFO:', new Date().toISOString(), logmessage);
     });
-    it('error { message: "logmessage", extraparam: "extravalue" }', async () => {
+    test('error { message: "logmessage", extraparam: "extravalue" }', async () => {
       const logmessage = { message: 'logmessage', extraparam: 'extravalue' };
       log(console, {
         type: 'text',
@@ -401,7 +399,7 @@ describe('Logs:', () => {
       console.error(logmessage);
       sinon.assert.calledWith(logstub.error, 'ERROR:', new Date().toISOString(), logmessage);
     });
-    it('circular', async () => {
+    test('circular', async () => {
       const x = { message: 'logmessage', extraparam: 'extravalue' };
       const y = { message: 'logmessage', extraparam: 'extravalue', circular: x };
       x.y = y;
@@ -419,17 +417,16 @@ describe('Logs:', () => {
       });
     });
   });
-  describe('{ level: error | warn | log | info | debug }', () => {
-    beforeEach((done) => {
+  await describe('{ level: error | warn | log | info | debug }', async () => {
+    beforeEach(() => {
       if (console.isProxied) console.reset();
       sandbox2.restore();
       Object.keys(levels.consoleLevels).forEach((level) => {
         if (console[level].restore) console[level].restore();
         logstub[level] = sandbox2.spy(console, level);
       });
-      done();
     });
-    it('"unknown" (fallback to debug)', async () => {
+    test('"unknown" (fallback to debug)', async () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'json',
@@ -455,7 +452,7 @@ describe('Logs:', () => {
       sinon.assert.calledWith(logstub.error, { ...result, level: 'ERROR' });
       assert.equal(validator.validate(result, logschema).valid ,true)
     });
-    it('"debug"', async () => {
+    test('"debug"', async () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'json',
@@ -481,7 +478,7 @@ describe('Logs:', () => {
       sinon.assert.calledWith(logstub.error, { ...result, level: 'ERROR' });
       assert.equal(validator.validate(result, logschema).valid ,true)
     });
-    it('"info"', async () => {
+    test('"info"', async () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'json',
@@ -507,7 +504,7 @@ describe('Logs:', () => {
       sinon.assert.calledWith(logstub.error, { ...result, level: 'ERROR' });
       assert.equal(validator.validate(result, logschema).valid ,true)
     });
-    it('"log"', async () => {
+    test('"log"', async () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'json',
@@ -533,7 +530,7 @@ describe('Logs:', () => {
       sinon.assert.calledWith(logstub.error, { ...result, level: 'ERROR' });
       assert.equal(validator.validate(result, logschema).valid ,true)
     });
-    it('"warn"', async () => {
+    test('"warn"', async () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'json',
@@ -559,7 +556,7 @@ describe('Logs:', () => {
       sinon.assert.calledWith(logstub.error, { ...result, level: 'ERROR' });
       assert.equal(validator.validate(result, logschema).valid ,true)
     });
-    it('"error"', async () => {
+    test('"error"', async () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'json',

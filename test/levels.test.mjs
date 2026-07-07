@@ -1,16 +1,17 @@
 import sinon from 'sinon';
+import { test, describe, before, beforeEach, after, afterEach } from 'node:test';
 import log from '../lib/index.js';
 import { levels } from '../lib/config/index.js';
 
 const v4 = /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$|/i;
 
-describe('log levels:', () => {
+describe('log levels:', async () => {
   let sandbox;
   let sandbox2;
   let clock;
   const logstub = {};
 
-  before((done) => {
+  before(async () => {
     if (console.isProxied) console.reset();
     sandbox2 = sinon.createSandbox();
     Object.keys(levels.consoleLevels).forEach((level) => {
@@ -18,22 +19,19 @@ describe('log levels:', () => {
       logstub[level] = sandbox2.spy(console, level);
     });
     clock = sinon.useFakeTimers(Date.now());
-    done();
   });
-  after((done) => {
+  after(async () => {
     clock.restore();
     sandbox2.restore();
-    done();
   });
-  beforeEach((done) => {
+  beforeEach(async() => {
     sandbox = sinon.createSandbox();
-    done();
   });
-  afterEach(() => {
+  afterEach(async() => {
     sandbox.restore();
   });
-  describe('log', () => {
-    it('"logmessage" should use last config', async () => {
+  await describe('log', async () => {
+    await test('"logmessage" should use last config', async () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'json',
@@ -69,8 +67,8 @@ describe('log levels:', () => {
       });
     });
   });
-  describe('log no override', () => {
-    it('"logmessage"', async () => {
+  await describe('log no override', async() => {
+     await test('"logmessage"', () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'json',
@@ -86,8 +84,8 @@ describe('log levels:', () => {
       });
     });
   });
-  describe('error', () => {
-    it('"logmessage"', async () => {
+  await describe('error', async () => {
+    await test('"logmessage"', () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'json',
@@ -103,8 +101,8 @@ describe('log levels:', () => {
       });
     });
   });
-  describe('warn', () => {
-    it('"logmessage"', async () => {
+  await describe('warn', async () => {
+    await test('"logmessage"', () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'json',
@@ -120,8 +118,8 @@ describe('log levels:', () => {
       });
     });
   });
-  describe('info', () => {
-    it('"logmessage"', async () => {
+  await describe('info', async() => {
+    await test('"logmessage"', async () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'json',
@@ -137,8 +135,8 @@ describe('log levels:', () => {
       });
     });
   });
-  describe('debug', () => {
-    it('"logmessage"', async () => {
+  await describe('debug', async() => {
+    await test('"logmessage"', async () => {
       const logmessage = 'logmessage';
       log(console, {
         type: 'json',
