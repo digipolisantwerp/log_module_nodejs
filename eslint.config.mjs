@@ -1,6 +1,4 @@
-import globals from "globals";
 import pluginJs from "@eslint/js";
-
 
 export default [
     {
@@ -10,8 +8,8 @@ export default [
     {
         languageOptions: {
             globals: {
-                ...globals.browser,
-                ...globals.node
+                "console": false,
+                "Buffer": false,
             }
         },
         rules: {
